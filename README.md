@@ -299,7 +299,7 @@ The specification is written in English. That does not determine the output lang
 
 ## Version
 
-Current version: **1.7.1**
+Current version: **1.7.2**
 
 ## License
 

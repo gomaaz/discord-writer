@@ -1,10 +1,68 @@
 ---
 name: discord-writer
-description: Use ONLY when the user wants content prepared as a Discord message to paste into a channel — announcements, changelogs, release notes, patch notes, status posts, updates or summaries for Discord. Discord must be named in the request or unambiguous from context. Formats such content as ready-to-paste, mobile-first messages using native Discord Markdown, responsive change lists, changelog categories, callouts, status and record layouts, diff, timestamps and link-preview control, steerable by user style profiles. Do NOT use for Discord bot or API development (discord.py, discord.js, embed JSON, slash commands, webhooks, gateway events), for message formatting on other platforms, or for general Markdown work.
-version: 1.7.1
+description: Formats content as a ready-to-paste Discord message — mobile-first, using native Discord Markdown, changelog categories, callouts, diff blocks, record layouts and timestamps, steerable by user style profiles. HARD REQUIREMENT - the user must explicitly say Discord, or Discord must already have been established as the target earlier in the same conversation. If Discord is not mentioned, do NOT use this skill - not for "write me a post", not for "write an announcement", not for patch notes, release notes, updates, status reports or summaries. A generic request to write a post is NOT a Discord request. Never use this skill for Discord bot or API development (discord.py, discord.js, embed JSON, slash commands, webhooks, gateway events), for other chat platforms, or for general Markdown and documentation work.
+version: 1.7.2
 ---
 
 # discord-writer
+
+# 0. When this skill applies
+
+## Check this before reading any further
+
+**Did the user say "Discord", or was Discord already established as the target in this conversation?**
+
+**If no → stop here.** Ignore the rest of this file and answer the request the way you would without it. Do not mention that this skill exists, do not announce that you are not using it, and do not ask whether the user meant Discord. Just answer.
+
+Being loaded is not the same as being applicable. A skill host loads this file from a similarity match on its description; that match is a guess, and this section is the check on that guess. Overriding the check because the file is already in context is the one failure mode this section exists to prevent.
+
+These requests must **not** activate the skill:
+
+| Request | Why not |
+|---|---|
+| "write me a post about X" | A post is not a Discord post. Blogs, forums and social platforms all have posts. |
+| "write an announcement for the team" | No channel named, no Discord. |
+| "make patch notes for 2.5" | Patch notes are published in many places. |
+| "summarize this for the community" | Community ≠ Discord. |
+| "format this nicely" | No target platform at all. |
+| "help me fix my discord.py bot" | Says Discord, but it is code — see *Do not apply to*. |
+
+Gaming, community or release topics do not imply Discord either. A request about a game build, a raid schedule or a server event is still not a Discord request unless Discord is named.
+
+## Hard condition
+
+**Discord must be named in the request, or be unambiguous from context.** If it is not, do not apply this skill.
+
+Unambiguous from context means, for example:
+
+- an active Discord style profile or guideline for this conversation
+- an ongoing exchange in which the target was already established as Discord
+- the user pasting Discord output back in for revision
+
+Once Discord is established in a conversation, follow-up requests inherit it. The user does not have to repeat the word for every message.
+
+This skill is built for one job: turning content into a Discord message. Outside that job it adds ~57 KB of rules that get in the way, so its scope is deliberately narrow.
+
+## Apply when the user wants
+
+- an announcement, update, changelog, release or patch note for a Discord channel
+- a status post, incident notice, schedule or event announcement for Discord
+- notes, data or a summary reformatted so it can be pasted into Discord
+- an existing Discord message restructured, shortened or split
+- a Discord style profile or content profile created (§ 20, § 33)
+
+## Do not apply to
+
+- **Discord bot and API development** — `discord.py`, `discord.js`, embed JSON, slash commands, webhooks, gateway events, intents, rate limits. That is code, and the formatting rules here do not apply to it. A bot's *message text* may still be formatted with this skill, but only when the user asks for that specifically.
+- **other platforms** — Slack, Teams, Matrix, forums, email, GitHub. Their Markdown and their width behavior differ; applying these rules there produces confidently wrong output.
+- **general Markdown, documentation or README work**, even when it looks similar.
+- **plain questions about Discord** — features, permissions, moderation, Nitro. Answer those normally.
+
+## When it is unclear
+
+Do not apply the skill, and do not ask a clarifying question just to justify applying it. Answer the request normally. A user who wants Discord output will say so, and the cost of a missed activation is one short follow-up — while a wrong activation reshapes an answer that was never meant to be a chat message.
+
+---
 
 ## Purpose
 
@@ -36,43 +94,6 @@ Priorities, in this order:
 7. Decoration only when it supports information
 
 **Language note:** This specification is written in English. That does not determine the output language. Write the Discord message in the user's language (see § 15), and translate the default labels of this skill — changelog categories, callout labels, status wording — into that language unless a profile defines its own wording.
-
----
-
-# 0. When this skill applies
-
-This skill is built for one job: turning content into a Discord message. Outside that job it adds ~57 KB of rules that get in the way, so its scope is deliberately narrow.
-
-## Hard condition
-
-**Discord must be named in the request, or be unambiguous from context.** If it is not, do not apply this skill.
-
-Unambiguous from context means, for example:
-
-- an active Discord style profile or guideline for this conversation
-- an ongoing exchange in which the target was already established as Discord
-- the user pasting Discord output back in for revision
-
-Once Discord is established in a conversation, follow-up requests inherit it. The user does not have to repeat the word for every message.
-
-## Apply when the user wants
-
-- an announcement, update, changelog, release or patch note for a Discord channel
-- a status post, incident notice, schedule or event announcement for Discord
-- notes, data or a summary reformatted so it can be pasted into Discord
-- an existing Discord message restructured, shortened or split
-- a Discord style profile or content profile created (§ 20, § 33)
-
-## Do not apply to
-
-- **Discord bot and API development** — `discord.py`, `discord.js`, embed JSON, slash commands, webhooks, gateway events, intents, rate limits. That is code, and the formatting rules here do not apply to it. A bot's *message text* may still be formatted with this skill, but only when the user asks for that specifically.
-- **other platforms** — Slack, Teams, Matrix, forums, email, GitHub. Their Markdown and their width behavior differ; applying these rules there produces confidently wrong output.
-- **general Markdown, documentation or README work**, even when it looks similar.
-- **plain questions about Discord** — features, permissions, moderation, Nitro. Answer those normally.
-
-## When it is unclear
-
-Do not apply the skill, and do not ask a clarifying question just to justify applying it. Answer the request normally. A user who wants Discord output will say so, and the cost of a missed activation is one short follow-up — while a wrong activation reshapes an answer that was never meant to be a chat message.
 
 ---
 

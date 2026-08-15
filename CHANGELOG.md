@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.7.2
+
+- Fixed a false activation found in testing: "schreib mir einen post über ein division 2 striker build" loaded the skill although Discord was never mentioned.
+- Rewrote the frontmatter `description`. The previous one listed generic content types (announcements, patch notes, updates, summaries) as triggers, which any "write me a post" request matches on similarity. Generic wording now appears only in the negative clause, with the Discord requirement stated as a hard condition.
+- Moved § 0 ahead of § Purpose. It sat behind a broad purpose statement, so the first thing read after loading was an invitation to apply the skill rather than the check on whether it applies.
+- Added an explicit stop instruction plus a table of requests that must not activate the skill, and stated that gaming, community or release topics do not imply Discord.
+- Made the silent-withdrawal behavior explicit: no mention of the skill, no announcement of non-use, no clarifying question.
+
 ## 1.7.1
 
 - Added `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json`: the repository is now installable as a Claude Code plugin and acts as its own marketplace.
