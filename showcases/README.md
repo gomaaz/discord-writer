@@ -14,8 +14,8 @@ a mockup.
 | | Showcase | Shows | Shot |
 |---|---|---|---|
 | 01 | [One post, six formats](#01--one-post-six-formats) | The flagship: heading, prose, change list, diff, callout, timestamp, subtext in a single message | ⬜ |
-| 02 | [The table trap](#02--the-table-trap) | Why 4 columns destroy a phone screen, and what replaces them | ⬜ |
-| 03 | [Layout mode](#03--layout-mode) | The same data mobile-first vs desktop-first — the table survives when you say it should | ⬜ |
+| 02 | [One layout, two screens](#02--one-layout-two-screens) | The same data as a desktop table and as mobile records | ⬜ |
+| 03 | [Screen priority](#03--screen-priority) | Composing for desktop by default, and the offer to narrow it | ⬜ |
 | 04 | [Color that survives copy/paste](#04--color-that-survives-copypaste) | `diff` with real red and green, readable without color too | ⬜ |
 | 05 | [Before and after](#05--before-and-after) | Change card for the one change that matters | ⬜ |
 | 06 | [Timestamps that adapt](#06--timestamps-that-adapt-to-the-reader) | One text, every reader sees their own time zone | ⬜ |
@@ -28,8 +28,7 @@ a mockup.
 ## 01 — One post, six formats
 
 The flagship case. Native Markdown, a compact change list, a `diff`, a callout, a
-timestamped metadata line and a subtext footer — in **one** message that still
-holds together on a phone.
+timestamped metadata line and a subtext footer — in **one** message.
 
 **Input:**
 
@@ -72,10 +71,9 @@ looked good.
 
 ---
 
-## 02 — The table trap
+## 02 — One layout, two screens
 
-The most common way Discord posts break on mobile. Four columns fit a monitor and
-destroy a phone screen:
+By default the skill composes for desktop, so a four-column table stays a table:
 
 `````text
 ```
@@ -85,7 +83,8 @@ Database    Online   14.6      18 ms
 ```
 `````
 
-In `mobile-first` the same data becomes stacked records:
+Ask for a mobile-safe layout and the same data becomes stacked records, because
+four columns fit a monitor and destroy a narrow screen:
 
 `````text
 ```
@@ -101,24 +100,25 @@ Latency:  18 ms
 ```
 `````
 
-Both shots must come from the **same device at the same width**, otherwise the
-comparison proves nothing.
+Capture the table on desktop and the records on a phone — that is the pair the
+default and the mobile request actually produce. Keep the width consistent within
+each half, otherwise the comparison proves nothing.
 
 ---
 
-## 03 — Layout mode
+## 03 — Screen priority
 
-Mobile-first is a default, not a cage. Tell the skill the audience is on desktop
-and the table survives — see `SKILL.md` § 2.1.
+Desktop is the default because composing happens at a keyboard (`SKILL.md` § 2).
+A wide result comes with an offer to narrow it — and only a wide one.
 
 **Input:**
 
 ```text
 service overview: api online 3.2.1 42ms, database online 14.6 18ms,
-cache degraded 7.0.5 91ms. this channel is read on desktop, keep the table.
+cache degraded 7.0.5 91ms
 ```
 
-**Output with `desktop-first`:**
+**Output (default `desktop-first`):**
 
 `````text
 ## Service overview
@@ -130,11 +130,17 @@ Database    Online     14.6      18 ms
 Cache       Degraded   7.0.5     91 ms
 ```
 
--# Wide table — scrolls horizontally on phones.
 `````
 
-The same input in `mobile-first` produces the stacked records from showcase 02.
-The screenshot pair is the point: one switch, two deliberate results.
+Followed by one short line:
+
+```text
+This uses a wide table. Want a mobile-friendly version?
+```
+
+Say yes and it becomes the stacked records from showcase 02. The screenshot pair
+is the point: the structure is offered, never taken away unasked. A compact list
+or a callout gets no such offer — it already reflows.
 
 ---
 
@@ -245,8 +251,8 @@ its own.
 
 ## 09 — Long changes
 
-A long `OLD → NEW` pair would blow past the width budget on one line, so it
-becomes a stacked hanging change.
+A long `OLD → NEW` pair is hard to follow on one line, so it becomes a stacked
+hanging change — and it stays unambiguous at any width.
 
 `````text
 ## Access control
@@ -270,7 +276,7 @@ Access control
 | | |
 |---|---|
 | Theme | Dark — it is where the contrast rules were tested |
-| Device | A real phone, default zoom, portrait |
+| Device | Desktop for default output; a real phone for anything showing the `mobile-first` layout. Showcases 02 and 03 need both, at a consistent width. |
 | Crop | One message per shot — no channel list, no message bar, no usernames |
 | Format | PNG into `images/`, named after the showcase, e.g. `01-hybrid-post.png` |
 

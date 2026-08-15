@@ -2,12 +2,12 @@ discord_writer:
   profile: "my-discord-style"
 
   target:
-    # Decides how strictly narrow screens are respected, and whether wide
+    # Decides how much narrow screens constrain the layout, and whether wide
     # tables survive. See SKILL.md § 2.1.
-    #   mobile-first  ≤36 chars, 2 columns, tables become records
+    #   desktop-first ≤80 chars, wide tables are kept as tables (default)
     #   balanced      ≤48 chars, up to 3-4 short columns
-    #   desktop-first ≤80 chars, wide tables are kept as tables
-    platform: mobile-first       # mobile-first | balanced | desktop-first
+    #   mobile-first  ≤36 chars, 2 columns, tables become records
+    platform: desktop-first      # desktop-first | balanced | mobile-first
     density: balanced            # compact | balanced | spacious
 
   language:
@@ -85,7 +85,7 @@ discord_writer:
     open: "☐"
 
   codeblocks:
-    mobile_target_width: 36      # overrides the width budget of target.platform
+    mobile_target_width: 36      # budget used when composing for mobile
     mobile_soft_max_width: 40
     allow_wide_tables: false     # true keeps 4+ column tables in any platform mode
 

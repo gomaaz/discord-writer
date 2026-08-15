@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.8
+
+- **Changed the default layout mode from `mobile-first` to `desktop-first`.** Composing happens at a keyboard, and structure that was pre-shrunk for a phone cannot be recovered afterwards, while narrowing a layout later is straightforward. Tables now stay tables by default.
+- Mobile is deferred, not discarded: a mobile-safe layout is produced when the user asks for it, sets `mobile-first`/`balanced`, or states the audience reads on phones. Such a statement carries forward to later posts in the conversation.
+- Added the post-delivery offer: after a result wide enough to break on a phone, one short line asks whether a mobile version is wanted. Output that already reflows gets no such line, and a delivered post is never converted unasked.
+- The empirical mobile findings are unchanged and still binding — 36/40/44 characters, records instead of 4+ columns. They are now the `mobile-first` budget rather than the budget for every post.
+- Rewrote § 2, reordered the § 2.1 mode table, and updated § 7, § 17 step 0, § 20.3, § 22.1, § 26, § 28 rules 2 and 7–9, § 29.1 and the § 24 adaptation cases accordingly.
+- Rewrote R11 with three acceptance criteria: the default keeps the table, a mobile request actually changes it, and the offer appears only for wide output. R2 and R4 restated as mobile-budget cases.
+- Profile examples switched to `desktop-first`, except Community, which keeps `mobile-first` deliberately as the demonstration case.
+
 ## 1.7.2
 
 - Fixed a false activation found in testing: "schreib mir einen post über ein division 2 striker build" loaded the skill although Discord was never mentioned.

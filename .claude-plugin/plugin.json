@@ -1,8 +1,8 @@
 {
   "name": "discord-writer",
   "displayName": "discord-writer",
-  "version": "1.7.2",
-  "description": "Turn arbitrary content into copy-ready, mobile-first Discord messages. Picks the layout from the shape of the information and can be steered by user style profiles.",
+  "version": "1.8.0",
+  "description": "Turn arbitrary content into copy-ready Discord messages. Picks the layout from the shape of the information and can be steered by user style profiles.",
   "author": {
     "name": "gomaaz",
     "url": "https://github.com/gomaaz"
@@ -16,7 +16,6 @@
     "markdown",
     "changelog",
     "release-notes",
-    "announcements",
-    "mobile-first"
+    "announcements"
   ]
 }

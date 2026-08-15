@@ -9,7 +9,7 @@
     {
       "name": "discord-writer",
       "source": "./",
-      "description": "Turn arbitrary content into copy-ready, mobile-first Discord messages. Picks the layout from the shape of the information and can be steered by user style profiles.",
+      "description": "Turn arbitrary content into copy-ready Discord messages. Picks the layout from the shape of the information and can be steered by user style profiles.",
       "category": "productivity",
       "tags": [
         "discord",

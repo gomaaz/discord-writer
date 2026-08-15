@@ -84,7 +84,7 @@ Keep the YAML schema in `SKILL.md` § 22.1 / § 30 and the templates in sync; th
 - Keep the **base skill domain-neutral**.
 - Do not add default logic tied to a specific game, brand, product, company, community, or industry.
 - Domain-specific terminology is allowed only when it is user-provided or belongs to a user-created profile outside the generic core.
-- Preserve the empirically tested mobile-first rules unless there is new evidence that justifies changing them.
+- Preserve the empirically tested mobile rendering findings unless there is new evidence that justifies changing them. **They remain valid as findings even though `desktop-first` is the default since 1.8** — the default decides which budget applies first, not what a phone does.
 - Do not replace tested Discord behavior with assumptions from generic Markdown implementations.
 - Keep the skill usable by both Claude-family and OpenAI-family assistants; avoid vendor-specific requirements in `SKILL.md` unless placed in a clearly optional integration note.
 - Do not silently remove existing capabilities when refactoring.
@@ -93,8 +93,8 @@ Keep the YAML schema in `SKILL.md` § 22.1 / § 30 and the templates in sync; th
 
 These rules come from real rendering tests on desktop and mobile. Treat them as findings, not as style opinions:
 
-- ~36 visible monospace characters is the conservative mobile target; ~40 is the practical upper edge; ~44+ likely wraps. These are layout guidance, not Discord protocol limits.
-- Wide 4+ column pseudo-tables are not a safe generic mobile layout — use record layouts instead.
+- ~36 visible monospace characters is the conservative mobile target; ~40 is the practical upper edge; ~44+ likely wraps. These are layout guidance, not Discord protocol limits. They are the `mobile-first` budget, applied on request — not to every post (§ 2).
+- Wide 4+ column pseudo-tables are not a safe *mobile* layout — use record layouts when composing for mobile. Under the `desktop-first` default they are a legitimate result and must not be restructured unasked.
 - `diff` renders usefully on tested mobile and desktop clients; ANSI color did **not** work reliably on the tested mobile client and stays desktop-only/experimental.
 - `>>>` quotes the entire remainder of the message, so bounded multiline callouts prefix every line with `>`.
 - `[x]` / `[ ]` are not interactive Discord checkboxes; use Unicode `☑` / `☐`.

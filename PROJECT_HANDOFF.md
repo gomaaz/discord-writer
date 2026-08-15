@@ -2,11 +2,11 @@
 
 ## Current state
 
-The project reached version **1.7.2** through iterative real-world Discord rendering tests on desktop and mobile. As of 1.5 the specification and all templates/examples are English-only; output language still follows the user.
+The project reached version **1.8** through iterative real-world Discord rendering tests on desktop and mobile. As of 1.5 the specification and all templates/examples are English-only; output language still follows the user.
 
 The project began as a formatting helper and evolved into a generic content-aware Discord renderer with:
 
-- mobile-first rendering rules,
+- a steerable screen-priority model, desktop-first by default,
 - native Markdown and hybrid post layouts,
 - multiple responsive change representations,
 - changelog, status, callout, checklist, metadata, link and timestamp patterns,
@@ -82,7 +82,7 @@ First, audit the repository without editing anything. Summarize:
 4. any places where domain-specific assumptions accidentally remain,
 5. a proposed low-risk cleanup plan.
 
-Preserve the project's tested mobile-first Discord behavior and domain neutrality. Do not redesign the skill yet. Wait for my approval after the audit.
+Preserve the project's tested Discord rendering findings and domain neutrality. Do not redesign the skill yet. Wait for my approval after the audit.
 ```
 
 ## GitHub publication

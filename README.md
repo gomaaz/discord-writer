@@ -1,10 +1,10 @@
-![discord-writer — turning rough notes into mobile-first Discord messages](assets/banner.png)
+![discord-writer — turning rough notes into well-structured Discord messages](assets/banner.png)
 
 # discord-writer
 
-`discord-writer` is a domain-neutral skill for turning arbitrary content into copy-ready, mobile-first Discord messages.
+`discord-writer` is a domain-neutral skill for turning arbitrary content into copy-ready Discord messages.
 
-You paste in rough notes, a changelog, a status dump or a config diff. You get back one block of Discord raw text that you can paste straight into a channel — structured for a narrow phone screen, not for a wide desktop table.
+You paste in rough notes, a changelog, a status dump or a config diff. You get back one block of Discord raw text that you can paste straight into a channel — with the layout chosen from the shape of the information, not from a template.
 
 It focuses on information structure rather than a specific game, product, brand, community, or industry. Domain-specific terminology may come from the current user input or from a user-defined guideline/profile, but never from the base skill itself.
 
@@ -16,7 +16,7 @@ Two highlights below. The full **[showcase gallery](showcases/)** has nine, each
 
 ### One post, six formats
 
-Native Markdown, a compact change list, a `diff`, a callout, a timestamped metadata line and a subtext footer — in **one** message that still holds together on a phone.
+Native Markdown, a compact change list, a `diff`, a callout, a timestamped metadata line and a subtext footer — in **one** message.
 
 **You type:**
 
@@ -56,9 +56,9 @@ Bulk export is live, and sync no longer needs a human.
 
 Each format was chosen because of what the information *is*, not because it looked good. Note the four outer backticks: the message itself contains three, and this is the transport rule (§ 3) that keeps them alive through copy/paste.
 
-### The table trap
+### One layout, two screens
 
-The most common way Discord posts break on mobile. Four columns fit a monitor and destroy a phone screen:
+By default you compose for desktop, so a table stays a table:
 
 ```text
 SERVICE     STATUS   VERSION   LATENCY
@@ -66,7 +66,7 @@ API         Online   3.2.1     42 ms
 Database    Online   14.6      18 ms
 ```
 
-By default the same data becomes stacked records instead:
+Say it has to work on phones, and the same data becomes stacked records — because four columns fit a monitor and destroy a narrow screen:
 
 ```text
 API
@@ -80,9 +80,7 @@ Version:  14.6
 Latency:  18 ms
 ```
 
-Code block lines are planned at **≤ 36 visible characters**, measured from actual rendering tests on mobile.
-
-But that is a default, not a cage — tell the skill your channel is read on desktop and the table survives, at a wider budget. See [Layout mode](#mobile-first-is-a-default) below.
+The mobile budget of **≤ 36 visible characters** comes from actual rendering tests. It applies when you ask for it — see [Screen priority](#screen-priority) below.
 
 **→ [Browse all nine showcases](showcases/)**
 
@@ -148,9 +146,9 @@ Do not apply it to Discord bot or API development, to other platforms, or
 to general Markdown work.
 
 Before writing any Discord message, consult SKILL.md: choose the layout
-from the shape of the information, keep it mobile-first, and wrap every
-finished Discord message in four backticks so the inner Discord backticks
-survive copy/paste.
+from the shape of the information, compose for desktop unless the user
+asks for a mobile-safe layout, and wrap every finished Discord message in
+four backticks so the inner Discord backticks survive copy/paste.
 
 Never invent values, field names, IDs or Unix timestamps that were not
 supplied.
@@ -204,37 +202,37 @@ Ready-made starting points: [`templates/GUIDELINE-TEMPLATE.yaml`](templates/GUID
 
 To have the skill build one for you, ask: `Help me create a Discord style guideline.`
 
-## Mobile-first is a default
+## Screen priority
 
-Most Discord reading happens on a phone, so that is what the skill optimizes for by default. But your channel might not be like that — and then a table is genuinely the better layout, not a mistake to be corrected.
+You write at a keyboard, so the skill composes for a desktop client by default. Structure is preserved: tables stay tables, columns stay columns. Narrowing a layout afterwards is easy — recovering a structure that was already flattened is not.
 
-`target.platform` decides how strictly narrow screens are respected:
+`target.platform` decides how much narrow screens constrain the layout:
 
-| | `mobile-first` (default) | `balanced` | `desktop-first` |
+| | `desktop-first` (default) | `balanced` | `mobile-first` |
 |---|---|---|---|
-| Code block width | ≤ 36 chars | ≤ 48 chars | ≤ 80 chars |
-| Logical columns | 2 | up to 3–4 short ones | as many as the data needs |
-| A wide table | becomes stacked records | kept when compact | **kept as a table** |
+| Code block width | ≤ 80 chars | ≤ 48 chars | ≤ 36 chars |
+| Logical columns | as many as the data needs | up to 3–4 short ones | 2 |
+| A wide table | **kept as a table** | kept when compact | becomes stacked records |
 
-You do not need a profile for it. Any of these works for a single message:
+Mobile is deferred, not discarded. You do not need a profile — any of these switches a post, and the rest of the conversation with it:
 
 ```text
-This channel is read on desktop, keep the table.
-Mobile does not matter here.
+Make it mobile-friendly.
+Our members read this on their phones.
 ```
 
-And if you ask for a wide table without setting a mode, you get the table — plus one short line noting that it will scroll horizontally on phones. The skill will not silently refuse the layout you asked for, and it will not silently hand you one that breaks for half your readers.
+And when a post comes out wide enough to break on a phone, you get one short line offering the narrow version. Only then — a compact list or a callout reflows fine anyway, and asking about it would be noise. The skill never converts a delivered post on its own initiative.
 
-What `desktop-first` does **not** unlock: fake syntax highlighting for color, ANSI as an automatic choice, invented columns to fill a table, or exceeding Discord's character limit. Those are correctness rules, not width preferences. Details in [`SKILL.md`](SKILL.md) § 2.1.
+What `desktop-first` does **not** unlock: fake syntax highlighting for color, ANSI as an automatic choice, invented columns to fill a table, or exceeding Discord's character limit. Those are correctness rules, not width preferences. Details in [`SKILL.md`](SKILL.md) § 2 and § 2.1.
 
-One thing worth knowing: Discord has no native Markdown table rendering at all. A `| a | b |` row shows up as literal text with pipes. So "keeping a table" always means an aligned monospace code block — `desktop-first` only changes how wide it may get.
+One thing worth knowing: Discord has no native Markdown table rendering at all. A `| a | b |` row shows up as literal text with pipes. So "keeping a table" always means an aligned monospace code block — the mode only changes how wide it may get.
 
 ---
 
 ## What it does
 
 - native Discord Markdown for normal posts
-- mobile-first `OLD → NEW` / before-after layouts
+- responsive `OLD → NEW` / before-after layouts
 - changelog categories
 - callouts and status lists
 - record layouts for multi-field objects
@@ -299,7 +297,7 @@ The specification is written in English. That does not determine the output lang
 
 ## Version
 
-Current version: **1.7.2**
+Current version: **1.8**
 
 ## License
 

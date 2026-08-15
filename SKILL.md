@@ -1,7 +1,7 @@
 ---
 name: discord-writer
-description: Formats content as a ready-to-paste Discord message — mobile-first, using native Discord Markdown, changelog categories, callouts, diff blocks, record layouts and timestamps, steerable by user style profiles. HARD REQUIREMENT - the user must explicitly say Discord, or Discord must already have been established as the target earlier in the same conversation. If Discord is not mentioned, do NOT use this skill - not for "write me a post", not for "write an announcement", not for patch notes, release notes, updates, status reports or summaries. A generic request to write a post is NOT a Discord request. Never use this skill for Discord bot or API development (discord.py, discord.js, embed JSON, slash commands, webhooks, gateway events), for other chat platforms, or for general Markdown and documentation work.
-version: 1.7.2
+description: Formats content as a ready-to-paste Discord message using native Discord Markdown, changelog categories, callouts, diff blocks, record layouts and timestamps, steerable by user style profiles. HARD REQUIREMENT - the user must explicitly say Discord, or Discord must already have been established as the target earlier in the same conversation. If Discord is not mentioned, do NOT use this skill - not for "write me a post", not for "write an announcement", not for patch notes, release notes, updates, status reports or summaries. A generic request to write a post is NOT a Discord request. Never use this skill for Discord bot or API development (discord.py, discord.js, embed JSON, slash commands, webhooks, gateway events), for other chat platforms, or for general Markdown and documentation work.
+version: 1.8
 ---
 
 # discord-writer
@@ -66,7 +66,7 @@ Do not apply the skill, and do not ask a clarifying question just to justify app
 
 ## Purpose
 
-Prepare content so that it is quick to grasp in Discord, cleanly structured, directly copyable, and robustly readable on both desktop and smartphone.
+Prepare content so that it is quick to grasp in Discord, cleanly structured, directly copyable and clearly organized. Compose for a desktop client by default; produce a mobile-safe layout when it is asked for (§ 2).
 
 The skill is fully generic and **must never be tailored, in the base skill, to a specific game, product, brand, community or industry**. Domain-specific terms and structures may only come from the current user input or from a guideline supplied by the user.
 
@@ -86,7 +86,7 @@ It is suitable for, among other things:
 Priorities, in this order:
 
 1. Factual correctness
-2. Mobile readability
+2. Readability
 3. Direct copyability
 4. Clear information hierarchy
 5. High scannability
@@ -128,13 +128,37 @@ When several types of information occur together, a **hybrid post** may combine 
 
 ---
 
-# 2. Mobile-first is the default, not a law of nature
+# 2. Desktop-first is the default
 
-Plan every Discord output for a narrow smartphone first — **unless the user has told you the audience is not on phones**. Mobile-first is the default because most Discord reading happens on a phone and because a mobile-safe layout still reads fine on desktop. It is a default, not a technical hard rule: § 2.1 defines how to relax it on request.
+Compose Discord output for a desktop client by default. Use the full width a desktop window gives you: aligned tables stay tables, columns stay columns, and a comparison that reads best in a grid is written as a grid.
 
-## Empirically conservative width rule for monospace code blocks
+The reason is that composing is a desktop activity. Someone writing an announcement is at a keyboard, judging the result on the screen in front of them — and a layout that was pre-shrunk for a phone looks needlessly cramped there. Narrowing the layout is a transformation that can be applied afterwards; recovering a structure that was flattened away is not.
 
-In tested Discord rendering on mobile, roughly the following behavior was observed:
+**Do not silently sacrifice structure for phone width.** That is the previous default, and it is no longer the default.
+
+## Mobile is deferred, not discarded
+
+Mobile readability is still a real constraint — just not one that shapes the first draft.
+
+Switch to a mobile-safe layout when:
+
+- the user asks for it, in any wording ("make it mobile-friendly", "this has to work on phones", "our members read on mobile")
+- the user sets `target.platform: mobile-first` or `balanced` in a profile
+- the user states that the audience reads on phones
+
+**After delivering a post**, add one short line offering the mobile version **only when the output would actually break on a phone** — a table wider than about 44 characters, 4+ columns, or long aligned rows. For example:
+
+```text
+This uses a wide table. Want a mobile-friendly version?
+```
+
+Do not append that line to posts that are already narrow. Native Markdown, compact lists, callouts, status lists and short records reflow fine on any screen — offering to fix them is noise.
+
+Never restructure a delivered post into a mobile layout on your own initiative. Offer, then wait.
+
+## Empirical width behavior on mobile
+
+These values come from rendering tests and describe what a phone actually does. They are the budget for `mobile-first` and the reference for any mobile rework; § 2.1 gives the budget per mode.
 
 - up to about **36 characters**: safe target range
 - around **40 characters**: practical upper limit
@@ -142,34 +166,33 @@ In tested Discord rendering on mobile, roughly the following behavior was observ
 
 Treat these values as **layout guidance, not as Discord protocol limits**.
 
-Rules:
+When a mobile-safe layout is requested or applied:
 
 1. Plan manually aligned code block lines with **≤ 36 visible characters** where possible.
 2. Only go up to about **40 characters** for a good reason.
 3. Do not force column alignment if it makes lines wider.
 4. For long content, use responsive native Markdown layouts or stacked layouts.
-5. Desktop beauty must never degrade mobile readability.
-
-These numbers are the `mobile-first` budget. § 2.1 gives the budget for the other layout modes.
 
 ---
 
-# 2.1 Layout mode: how strictly the mobile rules apply
+# 2.1 Layout mode: how much narrow screens constrain the layout
 
 The user decides how much the output has to respect narrow screens. This is what `target.platform` controls, and it is the single switch that decides whether wide tables are allowed to survive.
 
 ## The three modes
 
-| | `mobile-first` (default) | `balanced` | `desktop-first` |
+| | `desktop-first` (default) | `balanced` | `mobile-first` |
 |---|---|---|---|
-| Code block target width | ≤ 36 chars | ≤ 48 chars | ≤ 80 chars |
-| Soft maximum | ~40 | ~56 | ~100 |
-| Logical columns | 2, three only if very short | up to 3, four if short | as many as the data needs |
-| Wide aligned tables | convert to Record Layout | only when compact | **keep as a table** |
-| A table supplied by the user | restructure it | restructure only if it would wrap badly | **preserve its structure** |
-| Long `OLD → NEW` pairs | Hanging Change | Hanging Change when long | one line is fine |
+| Code block target width | ≤ 80 chars | ≤ 48 chars | ≤ 36 chars |
+| Soft maximum | ~100 | ~56 | ~40 |
+| Logical columns | as many as the data needs | up to 3, four if short | 2, three only if very short |
+| Wide aligned tables | **keep as a table** | only when compact | convert to Record Layout |
+| A table supplied by the user | **preserve its structure** | restructure only if it would wrap badly | restructure it |
+| Long `OLD → NEW` pairs | one line is fine | Hanging Change when long | Hanging Change |
 
 `balanced` is the honest middle: it assumes a mixed audience and buys some table width at the cost of a phone still having to scroll horizontally on the widest rows.
+
+Two things the default does **not** change. Native Markdown remains the standard for prose and short structured content (§ 4) — `desktop-first` is a permission to use width where width helps, not an instruction to put everything in a code block. And the mobile follow-up offer from § 2 still applies: a wide result gets one line asking whether a phone version is wanted.
 
 ## What `desktop-first` does and does not license
 
@@ -197,20 +220,22 @@ If the user supplies a Markdown pipe table and wants it "kept", convert it to an
 
 ## How the mode is set
 
-Any of these select a mode; a statement about the current post always wins over the profile (§ 21.2):
+`desktop-first` applies unless something selects otherwise. A statement about the current post always wins over the profile (§ 21.2):
 
 ```yaml
 target:
-  platform: desktop-first
+  platform: mobile-first
 ```
 
 ```text
-This channel is read on desktop, keep the table.
-Mobile does not matter here.
-Team is on desktop clients only.
+Make it mobile-friendly.
+Our members read this on their phones.
+This has to work on a narrow screen.
 ```
 
-If the user asks for a wide table **without** setting a mode, treat that as a post-level `desktop-first` request for this message: give them the table, and note in one short line that it will scroll horizontally on phones. Do not silently refuse the layout they asked for, and do not silently hand them a layout that breaks for half their readers.
+Any such statement switches the current post to `mobile-first`. It also applies to follow-up posts in the same conversation, in the same way an established Discord target carries forward (§ 0) — the user should not have to repeat it for every message.
+
+If the user accepts an offered mobile version (§ 2), rebuild that post under the `mobile-first` budget. Keep the content identical; only the layout changes.
 
 ## Related fields
 
@@ -270,7 +295,7 @@ Prefer native Discord formatting for running text, hierarchy and short structure
 
 Rules:
 
-- Keep headings short and phrase them **mobile-first**.
+- Keep headings **short**.
 - For `#` main headings use titles that are as short as possible; a single unbreakable word should ideally **not go much beyond about 20 visible characters**.
 - Very long single words or compound terms can break mid-word on narrow smartphones. In that case shorten the title, rephrase it naturally, or drop to a smaller heading level.
 - One functional emoji at the start is allowed, but it visually counts toward the available width. With overly long titles the emoji can end up on its own line.
@@ -506,9 +531,9 @@ If `OLD`, `→` and `NEW` are already unambiguous from the content, a compact pr
 
 # 7. No wide pseudo-tables as the default
 
-Wide desktop tables are not robust on mobile. This section describes the `mobile-first` default; in `balanced` and `desktop-first` the column budget widens as defined in § 2.1.
+Wide desktop tables are not robust on mobile. This section describes the `mobile-first` budget — it is **not** the default (§ 2 and § 2.1); apply it when a mobile-safe layout is requested or being produced.
 
-Avoid in generic output:
+Avoid when composing for mobile:
 
 - 4 or more logical columns
 - long labels plus separate `OLD` and `NEW` columns
@@ -521,7 +546,7 @@ Avoid in generic output:
 - **3 columns:** only with very short values
 - **4+ columns:** avoid; convert into a Record Layout
 
-In `desktop-first`, or with `codeblocks.allow_wide_tables: true`, a 4+ column table is a legitimate result and must not be silently restructured into records.
+In `desktop-first` — the default — or with `codeblocks.allow_wide_tables: true`, a 4+ column table is a legitimate result and must not be restructured into records.
 
 Example of a problematic structure:
 
@@ -855,7 +880,7 @@ Metadata is presented compactly as native Markdown lines.
 
 Rules:
 
-- Keep labels short and mobile-first: `Version`, `Status`, `Environment`, `Release`, `Start`, `Build`, `Channel`.
+- Keep labels short: `Version`, `Status`, `Environment`, `Release`, `Start`, `Build`, `Channel`.
 - Avoid long labels such as `Deployment window` when they cause timestamp lines to wrap unnecessarily.
 - Do not put metadata inside a code block when Discord timestamps or mentions should render natively.
 
@@ -1001,7 +1026,7 @@ Use this order before every output.
 
 ## 0. Which layout mode applies?
 
-Establish this first — it changes the answers to F, G and H. Default `mobile-first`; `balanced` or `desktop-first` when the profile says so or the user said the audience is not on phones (§ 2.1).
+Establish this first — it changes the answers to F, G and H. Default `desktop-first`; `balanced` or `mobile-first` when the profile says so, when the user asked for a mobile-safe layout, or when they said the audience reads on phones (§ 2, § 2.1).
 
 ## A. Is it mostly normal text?
 
@@ -1057,7 +1082,7 @@ Establish this first — it changes the answers to F, G and H. Default `mobile-f
 
 ## N. Is an exact point in time known?
 
-→ Discord timestamp; mobile-first usually `f`, `R`, `t` or `d`.
+→ Discord timestamp; usually `f`, `R`, `t` or `d`. Reserve `F` for cases where the verbose weekday earns its width.
 
 ## O. Does it contain a link?
 
@@ -1102,7 +1127,7 @@ Example:
 - **Status:** `Beta` → `Stable`
 ```
 
-Acceptance: understandable on mobile without a forced column structure.
+Acceptance: understandable without a forced column structure, and it reflows on any screen width.
 
 ## R3 – Long change
 
@@ -1127,7 +1152,7 @@ Version:  3.2.1
 Latency:  42 ms
 ```
 
-Acceptance: no forced 4+ columns.
+Acceptance: this is the `mobile-first` result. Under the `desktop-first` default the same data may stay a table — see R11.
 
 ## R5 – diff
 
@@ -1184,7 +1209,15 @@ Acceptance: link presentation matches the desired compactness.
 
 The same four-column data set, rendered twice.
 
-`mobile-first` must produce stacked records:
+Default (`desktop-first`) must keep the table:
+
+```text
+SERVICE     STATUS   VERSION   LATENCY
+API         Online   3.2.1     42 ms
+Database    Online   14.6      18 ms
+```
+
+After "make it mobile-friendly", or with `platform: mobile-first`, it must become stacked records:
 
 ```text
 API
@@ -1193,15 +1226,11 @@ Version:  3.2.1
 Latency:  42 ms
 ```
 
-`desktop-first`, or `allow_wide_tables: true`, must keep the table:
+Acceptance, in three parts:
 
-```text
-SERVICE     STATUS   VERSION   LATENCY
-API         Online   3.2.1     42 ms
-Database    Online   14.6      18 ms
-```
-
-Acceptance: the mode actually changes the result. A skill that emits records in both cases ignores the user's stated audience; one that emits the wide table in both cases ignores the mobile default.
+1. The default keeps the table. Emitting records unasked ignores the default.
+2. A mobile request actually changes the layout. Emitting the table again ignores the request.
+3. The wide default output is followed by one short line offering the mobile version (§ 2) — and a narrow post is not.
 
 ---
 
@@ -1275,7 +1304,7 @@ Clarify at least these points, as compactly as possible:
 5. **Changes:** compact list, strikethrough, change card, diff, auto
 6. **Links:** preview allowed, preferably suppressed, or automatic
 7. **Post splitting:** single-message, thread-friendly, aggressive-split
-8. **Mobile priority:** mobile-first, balanced or desktop-first
+8. **Screen priority:** desktop-first (default), balanced or mobile-first
 
 Only ask about points that cannot reasonably be derived from context.
 
@@ -1370,7 +1399,7 @@ discord_writer:
   profile: "technical-release"
 
   target:
-    platform: mobile-first       # mobile-first | balanced | desktop-first — see § 2.1
+    platform: desktop-first      # desktop-first (default) | balanced | mobile-first — see § 2.1
     density: compact             # compact | balanced | spacious
 
   language:
@@ -1656,6 +1685,10 @@ Running text stays native Markdown; only use `diff` where added/removed or befor
 
 Honor the request for this post (§ 2.1). Emit the table and add one short line that it will scroll horizontally on phones. Do not refuse the layout, and do not hand it over without the caveat.
 
+### The default produced a wide table, and the user says it has to work on phones
+
+Rebuild that post under the `mobile-first` budget: the table becomes records, long pairs become hanging changes. Keep the content identical — this is a layout change, not a rewrite. Treat the statement as applying to the rest of the conversation too (§ 2.1).
+
 ### The profile prefers no-preview links
 
 Emit external links as `<URL>` when the embed should be suppressed. If a named link is strictly required, be aware that Discord may still create an embed.
@@ -1711,14 +1744,15 @@ If the user explicitly wants a guideline/profile file created, emit the full pro
 
 ## Layout mode
 
-- [ ] Which mode applies — `mobile-first`, `balanced` or `desktop-first` (§ 2.1)?
-- [ ] Was a user statement about the audience ("desktop only", "keep the table") honored?
-- [ ] If a wide table was produced, was it actually requested rather than assumed?
-- [ ] If a requested wide layout will break on phones, was that stated in one short line?
+- [ ] Which mode applies — `desktop-first` (default), `balanced` or `mobile-first` (§ 2.1)?
+- [ ] Was a user statement about the audience ("has to work on phones", "make it mobile-friendly") honored?
+- [ ] Was structure preserved rather than pre-shrunk for a phone nobody asked about?
+- [ ] If the result is wide enough to break on a phone, was the mobile version offered in one short line (§ 2)?
+- [ ] Was that offer left out for output that already reflows fine?
 
 ## Mobile layout
 
-Applies in full to `mobile-first`; use the widened budget from § 2.1 for the other modes.
+Applies when composing for `mobile-first`; use the wider budget from § 2.1 for `balanced` and for the `desktop-first` default.
 
 - [ ] Is native Markdown the better responsive choice?
 - [ ] Is the `#` main heading short enough, in particular free of an overly long unbreakable single word?
@@ -1807,14 +1841,14 @@ Rules:
 # 28. Short form of the most important rules
 
 1. **Native Discord Markdown is the general standard.**
-2. **Keep main headings short and mobile-first; avoid very long single words.**
+2. **Keep main headings short; avoid very long single words.**
 3. **Short `OLD → NEW` comparisons as a Native Compact List.**
 4. **A few direct replacements may use Strikethrough Change.**
 5. **Highlight 1–3 central changes as a Change Card.**
 6. **Prefer structuring release notes into changelog categories.**
-7. **Plan code blocks mobile-first at ≤ 36 characters.**
-8. **About 40 characters is the practical upper guide value, not the target.**
-9. **No 4+ column pseudo-tables in generic output — unless `desktop-first` or `allow_wide_tables` is set (§ 2.1).**
+7. **Compose for desktop by default; ≤ 36 characters is the mobile budget, applied on request (§ 2).**
+8. **Offer a mobile version after a wide post — do not convert it unasked.**
+9. **4+ column tables are fine in the `desktop-first` default; convert them to records for `mobile-first` (§ 2.1).**
 10. **Long changes as a Hanging Change.**
 11. **Multiple properties per object as a Record Layout.**
 12. **Simple states of multiple objects as a Status List.**
@@ -1846,7 +1880,7 @@ Content profiles are strictly **domain-neutral**. The base skill must not contai
 
 Separate three layers:
 
-1. **Global style** – tone, density, emoji style, link policy, mobile-first, typography
+1. **Global style** – tone, density, emoji style, link policy, screen priority, typography
 2. **Content profile** – structure and preferred layouts for a recurring information structure
 3. **Current post override** – one-off deviations for the specific post
 
@@ -1927,7 +1961,7 @@ discord_writer:
   profile: "default"
 
   target:
-    platform: mobile-first
+    platform: desktop-first
     density: balanced
 
   headings:

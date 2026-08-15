@@ -2,13 +2,15 @@
 
 These profiles are examples, not hard-coded presets. Copy one, rename it, and adjust the values.
 
+Note `target.platform`: `desktop-first` is the skill default and is what most of these use. The Community profile sets `mobile-first` deliberately — community servers are read on phones more than at a desk, and that is exactly the case the setting exists for.
+
 ## Corporate
 
 ```yaml
 discord_writer:
   profile: corporate
   target:
-    platform: mobile-first
+    platform: desktop-first
     density: balanced
   language:
     tone: neutral
@@ -35,7 +37,7 @@ discord_writer:
 discord_writer:
   profile: technical
   target:
-    platform: mobile-first
+    platform: desktop-first
     density: compact
   language:
     tone: technical
@@ -86,7 +88,7 @@ discord_writer:
 discord_writer:
   profile: executive
   target:
-    platform: mobile-first
+    platform: desktop-first
     density: compact
   language:
     tone: executive
@@ -116,7 +118,7 @@ discord_writer:
   profile: community-structured
 
   target:
-    platform: mobile-first
+    platform: desktop-first
     density: balanced
 
   language:
