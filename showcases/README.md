@@ -6,22 +6,27 @@ Each showcase is one message: the rough input, the raw text the skill produces,
 and a screenshot of how Discord renders it. Everything here is real output, not
 a mockup.
 
-> **Screenshots in progress.** Entries marked ⬜ below have their source ready but
-> no capture yet. See [Adding a showcase](#adding-a-showcase) at the end.
+> **Screenshots pending.** The sources below are final; no captures exist yet.
+> [`CAPTURE-GUIDE.md`](CAPTURE-GUIDE.md) has the whole job in order: what to post,
+> which device each shot needs, and the filename to hand back.
 
 ## Overview
 
-| | Showcase | Shows | Shot |
+| | Showcase | Screenshot | Device |
 |---|---|---|---|
-| 01 | [One post, six formats](#01--one-post-six-formats) | The flagship: heading, prose, change list, diff, callout, timestamp, subtext in a single message | ⬜ |
-| 02 | [One layout, two screens](#02--one-layout-two-screens) | The same data as a desktop table and as mobile records | ⬜ |
-| 03 | [Screen priority](#03--screen-priority) | Composing for desktop by default, and the offer to narrow it | ⬜ |
-| 04 | [Color that survives copy/paste](#04--color-that-survives-copypaste) | `diff` with real red and green, readable without color too | ⬜ |
-| 05 | [Before and after](#05--before-and-after) | Change card for the one change that matters | ⬜ |
-| 06 | [Timestamps that adapt](#06--timestamps-that-adapt-to-the-reader) | One text, every reader sees their own time zone | ⬜ |
-| 07 | [Release notes](#07--release-notes) | Changelog categories, only the ones with content | ⬜ |
-| 08 | [Live status](#08--live-status) | Status list with color *and* text | ✅ |
-| 09 | [Long changes](#09--long-changes) | Hanging change plus a warning callout | ✅ |
+| 01 | [One post, six formats](#01--one-post-six-formats) | `01-hybrid-post.png` | desktop |
+| 02 | [Screen priority](#02--screen-priority) | `02a-table-desktop.png` + `02b-records-mobile.png` | both |
+| 03 | [Color that survives copy/paste](#03--color-that-survives-copypaste) | `03-diff.png` | desktop |
+| 04 | [Before and after](#04--before-and-after) | `04-change-card.png` | desktop |
+| 05 | [Timestamps that adapt](#05--timestamps-that-adapt-to-the-reader) | `05-timestamps.png` | desktop |
+| 06 | [Release notes](#06--release-notes) | `06-changelog.png` | desktop |
+| 07 | [Live status](#07--live-status) | `07-status-list.png` | desktop |
+| 08 | [Long changes](#08--long-changes) | `08-hanging-callout.png` | desktop |
+
+Nine captures for eight showcases — 02 needs both screens, because the pair *is*
+the showcase. Everything else is captured on desktop, which is what the
+`desktop-first` default produces (`SKILL.md` § 2). See
+[Capturing](#capturing) for the settings.
 
 ---
 
@@ -71,20 +76,30 @@ looked good.
 
 ---
 
-## 02 — One layout, two screens
+## 02 — Screen priority
 
-By default the skill composes for desktop, so a four-column table stays a table:
+Composing happens at a keyboard, so the default keeps structure: a four-column
+table stays a table (`SKILL.md` § 2).
 
 `````text
 ```
-SERVICE     STATUS   VERSION   LATENCY
-API         Online   3.2.1     42 ms
-Database    Online   14.6      18 ms
+SERVICE     STATUS     VERSION   LATENCY
+API         Online     3.2.1     42 ms
+Database    Online     14.6      18 ms
+Cache       Degraded   7.0.5     91 ms
 ```
 `````
 
-Ask for a mobile-safe layout and the same data becomes stacked records, because
-four columns fit a monitor and destroy a narrow screen:
+Because that is wide enough to break on a phone, the reply ends with one short
+line — and only then. A compact list or a callout reflows fine and gets no such
+offer:
+
+```text
+This uses a wide table. Want a mobile-friendly version?
+```
+
+Say yes, and the same data comes back as stacked records under the `mobile-first`
+budget. The content is identical; only the layout changed:
 
 `````text
 ```
@@ -97,54 +112,21 @@ Database
 Status:   Online
 Version:  14.6
 Latency:  18 ms
+
+Cache
+Status:   Degraded
+Version:  7.0.5
+Latency:  91 ms
 ```
 `````
 
-Capture the table on desktop and the records on a phone — that is the pair the
-default and the mobile request actually produce. Keep the width consistent within
-each half, otherwise the comparison proves nothing.
+The pair is the showcase: capture the table on desktop (`02a-table-desktop.png`)
+and the records on a phone (`02b-records-mobile.png`). The structure is offered,
+never taken away unasked.
 
 ---
 
-## 03 — Screen priority
-
-Desktop is the default because composing happens at a keyboard (`SKILL.md` § 2).
-A wide result comes with an offer to narrow it — and only a wide one.
-
-**Input:**
-
-```text
-service overview: api online 3.2.1 42ms, database online 14.6 18ms,
-cache degraded 7.0.5 91ms
-```
-
-**Output (default `desktop-first`):**
-
-`````text
-## Service overview
-
-```
-SERVICE     STATUS     VERSION   LATENCY
-API         Online     3.2.1     42 ms
-Database    Online     14.6      18 ms
-Cache       Degraded   7.0.5     91 ms
-```
-
-`````
-
-Followed by one short line:
-
-```text
-This uses a wide table. Want a mobile-friendly version?
-```
-
-Say yes and it becomes the stacked records from showcase 02. The screenshot pair
-is the point: the structure is offered, never taken away unasked. A compact list
-or a callout gets no such offer — it already reflows.
-
----
-
-## 04 — Color that survives copy/paste
+## 03 — Color that survives copy/paste
 
 A `diff` block is the one place Discord gives real red and green without hacks —
 and it still reads correctly without color, because `-` and `+` carry the meaning
@@ -165,7 +147,7 @@ skill treats them as desktop-only and never picks them automatically.
 
 ---
 
-## 05 — Before and after
+## 04 — Before and after
 
 When one change matters more than the rest, it gets a stacked card instead of a
 bullet.
@@ -186,7 +168,7 @@ bullet.
 
 ---
 
-## 06 — Timestamps that adapt to the reader
+## 05 — Timestamps that adapt to the reader
 
 Write the time once; every reader sees it in their own time zone, with a live
 countdown.
@@ -208,7 +190,7 @@ Once the date has passed, substitute a future one before capturing.
 
 ---
 
-## 07 — Release notes
+## 06 — Release notes
 
 ````text
 # 🚀 Release 2.5.0
@@ -233,7 +215,7 @@ for contrast in the dark theme (`SKILL.md` § 5.3) — if a capture shows `✨` 
 
 ---
 
-## 08 — Live status
+## 07 — Live status
 
 ````text
 ## Service status
@@ -249,7 +231,7 @@ its own.
 
 ---
 
-## 09 — Long changes
+## 08 — Long changes
 
 A long `OLD → NEW` pair is hard to follow on one line, so it becomes a stacked
 hanging change — and it stays unambiguous at any width.
@@ -278,7 +260,7 @@ Access control
 | Theme | Dark — it is where the contrast rules were tested |
 | Device | Desktop for default output; a real phone for anything showing the `mobile-first` layout. Showcases 02 and 03 need both, at a consistent width. |
 | Crop | One message per shot — no channel list, no message bar, no usernames |
-| Format | PNG into `images/`, named after the showcase, e.g. `01-hybrid-post.png` |
+| Format | PNG into `images/`, named as listed in [`CAPTURE-GUIDE.md`](CAPTURE-GUIDE.md) |
 
 Post into a quiet channel — a private server or a DM with yourself — so no
 avatars or unrelated messages end up in frame.

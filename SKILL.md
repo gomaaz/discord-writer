@@ -1,7 +1,7 @@
 ---
 name: discord-writer
 description: Formats content as a ready-to-paste Discord message using native Discord Markdown, changelog categories, callouts, diff blocks, record layouts and timestamps, steerable by user style profiles. HARD REQUIREMENT - the user must explicitly say Discord, or Discord must already have been established as the target earlier in the same conversation. If Discord is not mentioned, do NOT use this skill - not for "write me a post", not for "write an announcement", not for patch notes, release notes, updates, status reports or summaries. A generic request to write a post is NOT a Discord request. Never use this skill for Discord bot or API development (discord.py, discord.js, embed JSON, slash commands, webhooks, gateway events), for other chat platforms, or for general Markdown and documentation work.
-version: 1.8
+version: 1.9
 ---
 
 # discord-writer
@@ -53,7 +53,7 @@ This skill is built for one job: turning content into a Discord message. Outside
 
 ## Do not apply to
 
-- **Discord bot and API development** — `discord.py`, `discord.js`, embed JSON, slash commands, webhooks, gateway events, intents, rate limits. That is code, and the formatting rules here do not apply to it. A bot's *message text* may still be formatted with this skill, but only when the user asks for that specifically.
+- **Discord bot and API development** — `discord.py`, `discord.js`, embed JSON, slash commands, webhooks, gateway events, intents, rate limits. That is code, and the formatting rules here do not apply to it. A bot's *message text* may still be formatted with this skill, but only when the user asks for that specifically. The same line runs through embeds: the **text** inside an embed title, description or field is content this skill can write, with the limits in § 2.2 — the JSON object carrying it is code and is not.
 - **other platforms** — Slack, Teams, Matrix, forums, email, GitHub. Their Markdown and their width behavior differ; applying these rules there produces confidently wrong output.
 - **general Markdown, documentation or README work**, even when it looks similar.
 - **plain questions about Discord** — features, permissions, moderation, Nitro. Answer those normally.
@@ -242,6 +242,83 @@ If the user accepts an offered mobile version (§ 2), rebuild that post under th
 `codeblocks.mobile_target_width` and `codeblocks.mobile_soft_max_width` override the numbers above directly. `codeblocks.allow_wide_tables: true` permits 4+ column tables independently of the platform mode — use it when the audience is mixed but the data genuinely is tabular.
 
 When the fields conflict with the mode, the more specific field wins: an explicit width beats the mode's default width.
+
+---
+
+# 2.2 Destination: where the message is going
+
+The layout mode decides how *wide* the output may be. The destination decides which *technical limits* it has to satisfy — and Discord does not apply one set of limits to everything. A forum post needs a title, a normal channel message does not. An embed counts its characters in a budget entirely separate from the message around it. A voice message has no text body at all.
+
+Resolve the destination before writing. When it is not stated, do not interrupt a normal post to ask: use the safe defaults below, which are the values that also hold everywhere else.
+
+## Destination context
+
+```yaml
+discord_context:
+  destination: text            # text | forum | media | thread | announcement | embed | voice-message
+  delivery: manual             # manual | bot | webhook
+  nitro: unknown               # true | false | unknown
+  require_tag: unknown         # true | false | unknown
+```
+
+Safe defaults for anything unknown:
+
+```yaml
+destination: text
+delivery: manual
+nitro: false
+require_tag: false
+```
+
+`nitro: false` is the safe default even for manual delivery, because it produces the 2,000-character plan that every destination accepts.
+
+## Limits per destination
+
+| Destination | Title | Message body | Other |
+|---|---|---|---|
+| text channel | — | 2,000 | channel topic 1,024 |
+| forum post | **required**, 1–100 | 2,000 for the opening post | ≤ 5 tags per post, forum topic 4,096 |
+| media post | **required**, 1–100 | 2,000 | same tag limits as forum |
+| thread | 1–100 for the thread name | 2,000 per message | — |
+| announcement | — | 2,000 | crossposting is rate-limited, roughly 10/hour |
+| embed text | 256 | description 4,096 | 6,000 across **all** embeds of one message, ≤ 10 embeds, ≤ 25 fields, field name 256, field value 1,024, footer 2,048, author 256 |
+| voice message | — | no text body | requires exactly one audio attachment |
+
+Rules:
+
+- **2,000 characters is the universal safe limit.** Plan every message against it unless a destination demonstrably allows more.
+- **4,000 characters requires all three:** `delivery: manual`, Nitro confirmed, and a user who actually wants longer single messages. Two of the three are not enough — the same text sent by a bot or webhook is rejected at 2,000.
+- **A forum or media post must have a title**, 1–100 characters, naming the subject directly. Do not spend that budget on decorative prefixes.
+- **Media is never mandatory.** A media channel post is valid as text only. Recommend an image where it genuinely helps; never invent one, and never withhold the post for the lack of one.
+- **Never invent tags.** Choose only from tag options the user supplied. If the server requires a tag and none are known, say so in one line instead of making one up.
+- **A voice message is not a text destination.** Select it only on an explicit request, and state plainly that it needs the audio attachment.
+- **Overflow in a forum or media post goes into replies**, not into a longer opening post: overview first, the rest as follow-up messages in the same thread.
+
+## Embeds: the text, not the JSON
+
+The embed limits above apply when the user asks for the **text that goes into an embed** — a title, a description, field values. That is content, and this skill formats it.
+
+Constructing the embed itself — the JSON object, the library call, the bot that sends it — is code and stays out of scope (§ 0). If that is the request, this skill does not apply, limits or no limits.
+
+Two things behave differently inside an embed. Discord's 6,000-character budget is the **sum across all embeds of one message**, never 6,000 per embed. And the normal message content around the embeds keeps its own separate 2,000-character limit; the two budgets do not offset each other.
+
+## Attachment size is environment-dependent
+
+Do not state an upload size limit as a Discord fact. It varies by account, subscription, client and Discord's own changes. When file size matters, say that it depends on the account and the current client, or read the value from the environment — never quote one account's limit as a universal rule.
+
+## How firm is a limit?
+
+Constraints do not all carry the same weight. Classify one before repeating it to the user:
+
+| Class | Example | Treatment |
+|---|---|---|
+| API hard limit | 2,000 characters, embed 6,000 | never exceeded, never negotiable |
+| client limit | 4,000 characters with Nitro | depends on who posts, and how |
+| server-configurable | "at least one forum tag" | applies only when the user says it does |
+| environment-dependent | attachment upload size | never quote a fixed number |
+| recommendation | the width budgets in § 2 | layout guidance, adjustable |
+
+Never present a configurable or environment-dependent value as a hard limit. The width budgets are the clearest case: they are tested layout guidance, not something Discord enforces.
 
 ---
 
@@ -954,7 +1031,7 @@ Note the trade-off: the compact `<URL>` form suppresses the embed but does not o
 
 A long Discord post may scroll. Height alone is not a defect.
 
-By default, plan normal Discord messages to stay within the usual **2,000-character limit**, unless it is explicitly known that a higher limit applies to the user. If a longer paste would be treated as a file by Discord, that is usually not the desired outcome for directly readable posts.
+Plan normal Discord messages to stay within the **2,000-character limit** (§ 2.2). A higher limit applies only when all three conditions from § 2.2 hold: manual delivery, confirmed Nitro, and a user who wants longer single messages. If a longer paste would be treated as a file by Discord, that is usually not the desired outcome for directly readable posts.
 
 But also split content into multiple Discord messages independently of the character ceiling when it clearly improves navigation.
 
@@ -977,6 +1054,108 @@ Not in the middle of:
 Every message must remain understandable on its own.
 
 In threads, a series of short, thematically separated posts may explicitly be preferred.
+
+---
+
+# 14.1 Where exactly the cut goes
+
+§ 14 decides which content belongs in separate messages. This section decides where the cut lands once a message simply has to be split.
+
+## Split priority
+
+Take the highest boundary available, not the nearest one:
+
+1. major section boundary
+2. subsection boundary
+3. paragraph boundary
+4. list item boundary
+5. sentence boundary
+6. a hard character cut — last resort only
+
+## Never cut through
+
+- a Markdown link or a URL
+- a code fence
+- inline code
+- an aligned code block table
+- a heading
+- a list item, numbered or bulleted
+- a blockquote or callout block
+- spoiler markup
+- custom emoji syntax `<:name:id>`
+
+If a code block genuinely has to continue in the next message, **close the fence before the cut and open a new one after it**. A fence left open swallows the remainder of that message.
+
+## Continuation labels
+
+Use them when they help the reader orient, not as a default decoration.
+
+```text
+**Part 1/3**
+```
+
+Named parts are usually better than numbers, because they survive a later edit:
+
+```text
+## Overview
+## Details
+## Additional notes
+```
+
+Continuation labels are message content. They count toward the 2,000 characters and must be included when the message is measured.
+
+---
+
+# 14.2 Count, validate, then repair
+
+## What counts as a character
+
+Discord counts the raw text it receives, not the rendered result. Everything written is included:
+
+- heading markers, `**`, `~~`, backticks and every other Markdown character
+- code fences, including the language tag
+- list markers and indentation
+- URLs at full length, including the `<` and `>` of a suppressed preview
+- emoji, and custom emoji `<:name:id>` at full syntax length
+- `<t:...>` timestamps at syntax length, not at rendered length
+- line breaks and trailing whitespace
+
+The four outer backticks of the transport container (§ 3) are **not** part of the Discord message and do not count.
+
+## Validate after formatting, not before
+
+Length is a property of the finished text. Estimating it from the source notes is unreliable: the same data as a compact list and as a Record Layout differ by a wide margin, and `<t:1787241600:R>` counts as 16 characters while rendering as a short relative phrase.
+
+So the order is:
+
+1. resolve destination and delivery mode (§ 2.2)
+2. resolve the layout mode (§ 2.1)
+3. choose the layout from the shape of the information (§ 17)
+4. write the message
+5. count the finished text
+6. check the destination's requirements — title, tags, embed budget, attachments
+7. split if needed (§ 14, § 14.1)
+8. deliver
+
+## Automatic repair
+
+When the finished output violates a limit, fix it without asking — as long as the fix does not change what the message says. Allowed:
+
+- splitting into multiple messages
+- shortening an over-long title
+- redistributing content across sections, fields or embeds
+- turning a wide table into stacked records
+- moving secondary content into a follow-up message
+
+Not allowed. Report the problem instead of solving it this way:
+
+- deleting information the user supplied
+- inventing a tag, an attachment or a field value
+- collapsing a distinction the user deliberately made
+- changing a number, a name or a fact to save space
+- truncating substantive content, unless shortening was what the user asked for
+
+The dividing line is meaning. Rearranging is repair; removing is a decision that belongs to the user.
 
 ---
 
@@ -1024,9 +1203,13 @@ In threads, a series of short, thematically separated posts may explicitly be pr
 
 Use this order before every output.
 
-## 0. Which layout mode applies?
+## 0.1 Which destination and delivery mode apply?
 
-Establish this first — it changes the answers to F, G and H. Default `desktop-first`; `balanced` or `mobile-first` when the profile says so, when the user asked for a mobile-safe layout, or when they said the audience reads on phones (§ 2, § 2.1).
+Text channel, forum or media post, thread, announcement, embed text? Posted by hand or by a bot? This decides the character budget, whether a title is required and whether tags matter (§ 2.2). Unknown → the safe defaults: text channel, manual, 2,000 characters, no title, no tags.
+
+## 0.2 Which layout mode applies?
+
+Establish this next — it changes the answers to F, G and H. Default `desktop-first`; `balanced` or `mobile-first` when the profile says so, when the user asked for a mobile-safe layout, or when they said the audience reads on phones (§ 2, § 2.1).
 
 ## A. Is it mostly normal text?
 
@@ -1099,6 +1282,10 @@ Establish this first — it changes the answers to F, G and H. Default `desktop-
 ## R. Is the overall post very long or approaching 2,000 characters?
 
 → distribute it logically across several Discord messages.
+
+## S. Does the finished text actually satisfy the destination?
+
+→ count the formatted text, check title, tags and embed budget, then split where needed (§ 14.1, § 14.2). This step runs last, on the real output — never as an estimate beforehand.
 
 ---
 
@@ -1232,6 +1419,28 @@ Acceptance, in three parts:
 2. A mobile request actually changes the layout. Emitting the table again ignores the request.
 3. The wide default output is followed by one short line offering the mobile version (§ 2) — and a narrow post is not.
 
+## R12 – Destination requirements
+
+Input: a set of notes plus "post this in our forum channel".
+
+Acceptance, in four parts:
+
+1. The output carries a title of 1–100 characters, separate from the message body.
+2. The opening post stays within 2,000 characters; overflow becomes follow-up replies rather than a longer opening post.
+3. No tag is invented. If a tag appears to be required and none were supplied, that is stated in one line.
+4. No image is demanded. A text-only forum post is delivered as a valid result.
+
+## R13 – Splitting mechanics
+
+A post of roughly 2,600 characters containing one aligned code block that straddles the cut.
+
+Acceptance, in four parts:
+
+1. The cut falls on a section boundary — not mid-sentence, not mid-list, not mid-record.
+2. The code fence is closed before the cut and reopened after it. No message ends with an open fence.
+3. Each message is understandable on its own.
+4. Both messages, continuation labels included, stay within 2,000 characters — measured on the finished text, not estimated (§ 14.2).
+
 ---
 
 # 19. User guidelines & style profiles
@@ -1255,7 +1464,9 @@ Examples:
 - `>>>` only for the remainder of the message
 - do not force long tables on mobile
 - account for link preview behavior correctly
-- respect the Discord character limit
+- respect the destination's hard limits: character budget, required title, tag and embed limits (§ 2.2)
+- no invented tags, attachments or field values just to satisfy a destination
+- count and validate the finished text, not the draft (§ 14.2)
 
 ### Layer B – the user's style profile
 
@@ -1305,6 +1516,7 @@ Clarify at least these points, as compactly as possible:
 6. **Links:** preview allowed, preferably suppressed, or automatic
 7. **Post splitting:** single-message, thread-friendly, aggressive-split
 8. **Screen priority:** desktop-first (default), balanced or mobile-first
+9. **Destination**, but only when it is always the same — e.g. "everything goes into our forum channel" or "posted by a bot". A destination that varies per post belongs in the post, not in the profile (§ 2.2).
 
 Only ask about points that cannot reasonably be derived from context.
 
@@ -1356,6 +1568,8 @@ Only ask about points that cannot reasonably be derived from context.
 
 Technical correctness and valid Discord output take precedence. A style profile must not force invalid or obviously unreadable output.
 
+The destination's hard limits (§ 2.2) sit at this level as well. A profile preferring `single-message` does not lift the 2,000-character ceiling, and no profile can make a forum post's title optional. Where a preference collides with a destination limit, the limit wins and the preference is applied within what remains.
+
 ## 21.2 After that, the following order of preference applies
 
 1. **Explicit instruction for the current post**
@@ -1401,6 +1615,12 @@ discord_writer:
   target:
     platform: desktop-first      # desktop-first (default) | balanced | mobile-first — see § 2.1
     density: compact             # compact | balanced | spacious
+
+  destination:                   # technical limits of the target — see § 2.2
+    type: text                   # text | forum | media | thread | announcement | embed | voice-message
+    delivery: manual             # manual | bot | webhook
+    nitro: false                 # true enables the 4,000-char budget for manual delivery only
+    require_tag: false           # true when the server enforces at least one forum/media tag
 
   language:
     locale: en                   # output language of the Discord message
@@ -1689,6 +1909,14 @@ Honor the request for this post (§ 2.1). Emit the table and add one short line 
 
 Rebuild that post under the `mobile-first` budget: the table becomes records, long pairs become hanging changes. Keep the content identical — this is a layout change, not a rewrite. Treat the statement as applying to the rest of the conversation too (§ 2.1).
 
+### The profile prefers `single-message`, but the content is 3,000 characters
+
+Split it anyway. `splitting.mode` expresses a preference within what Discord accepts, not permission to exceed the limit (§ 21.1). Cut on the highest available boundary (§ 14.1) and keep each message self-contained.
+
+### The profile prefers `single-message`, and the destination is a forum channel
+
+The opening post holds the overview and stays within 2,000 characters; the rest becomes replies inside the same thread (§ 2.2). That still honors the preference — a forum thread is the forum's version of one message, not a series of separate posts.
+
 ### The profile prefers no-preview links
 
 Emit external links as `<URL>` when the embed should be suppressed. If a named link is strictly required, be aware that Discord may still create an embed.
@@ -1741,6 +1969,18 @@ If the user explicitly wants a guideline/profile file created, emit the full pro
 - [ ] Was nothing invented?
 - [ ] Are exceptions and limitations preserved?
 - [ ] Is the information hierarchy clear?
+
+## Destination and limits
+
+- [ ] Which destination is this for — text, forum, media, thread, announcement or embed text (§ 2.2)?
+- [ ] Was the 2,000-character budget applied, and 4,000 used only with manual delivery plus confirmed Nitro?
+- [ ] Does a forum or media post carry a title of 1–100 characters?
+- [ ] Were tags taken only from supplied options, never invented?
+- [ ] Was the post left valid as text-only instead of demanding an image?
+- [ ] For embed text: is the 6,000-character budget counted across all embeds rather than per embed?
+- [ ] Was the finished text counted after formatting instead of estimated beforehand (§ 14.2)?
+- [ ] Did any automatic repair only rearrange, never remove or invent?
+- [ ] Do splits fall on real boundaries, with no message left holding an open code fence (§ 14.1)?
 
 ## Layout mode
 
@@ -1868,6 +2108,9 @@ Rules:
 26. **Profiles may define compact, balanced or spacious as well as emoji, change, link, timestamp and splitting styles.**
 27. **With long or unsuitable content, switch to a more robust format automatically.**
 28. **Plain-language guidelines and YAML profiles are equally valid input forms.**
+29. **The destination sets the limits: 2,000 characters by default, a required 1–100 character title for forum and media posts, never an invented tag (§ 2.2).**
+30. **Count the finished text, not the draft — validate after formatting, never before (§ 14.2).**
+31. **Repair by rearranging; never by removing information or inventing what is missing.**
 ---
 
 # 29. Content profiles: structure-dependent layouts

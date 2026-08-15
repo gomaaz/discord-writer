@@ -276,6 +276,7 @@ discord-writer/
 │   └── banner.png
 ├── showcases/
 │   ├── README.md            # the gallery
+│   ├── CAPTURE-GUIDE.md     # how to produce its screenshots
 │   └── images/
 ├── templates/
 │   ├── GUIDELINE-TEMPLATE.yaml
@@ -297,7 +298,7 @@ The specification is written in English. That does not determine the output lang
 
 ## Version
 
-Current version: **1.8**
+Current version: **1.8.1**
 
 ## License
 

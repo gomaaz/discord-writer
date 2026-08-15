@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.8.1
+
+- Merged showcases "One layout, two screens" and "Layout mode" into a single "Screen priority" entry. Both needed the same screenshot, and the part that distinguished them — the offer to narrow the layout — is a chat reply, not a Discord message, so it could not be captured at all. Eight showcases, nine captures.
+- Added `showcases/CAPTURE-GUIDE.md`: the messages to post in order, which device each screenshot needs, and the exact filename to hand back.
+- Overview table now lists filename and device per showcase instead of a status marker.
+
 ## 1.8
 
 - **Changed the default layout mode from `mobile-first` to `desktop-first`.** Composing happens at a keyboard, and structure that was pre-shrunk for a phone cannot be recovered afterwards, while narrowing a layout later is straightforward. Tables now stay tables by default.
