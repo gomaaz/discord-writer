@@ -92,6 +92,8 @@ But that is a default, not a cage — tell the skill your channel is read on des
 
 The skill is a single file: [`SKILL.md`](SKILL.md). Any assistant that can read it can follow it.
 
+**When it activates:** only when Discord is named in your request or clear from context. It deliberately stays out of the way for Discord *bot* and API work (`discord.py`, embed JSON, slash commands), for other platforms, and for general Markdown — see § 0. Once you have established Discord in a conversation, follow-up messages inherit it.
+
 ### Claude Code
 
 Install it as a personal skill so it loads automatically when a task looks like Discord formatting:
@@ -129,6 +131,10 @@ For a one-off message, attaching `SKILL.md` to a single chat works too.
 ```text
 You format content as Discord messages by following the attached
 discord-writer specification (SKILL.md).
+
+Apply it only when the user wants content prepared as a Discord message.
+Do not apply it to Discord bot or API development, to other platforms, or
+to general Markdown work.
 
 Before writing any Discord message, consult SKILL.md: choose the layout
 from the shape of the information, keep it mobile-first, and wrap every
@@ -279,7 +285,7 @@ The specification is written in English. That does not determine the output lang
 
 ## Version
 
-Current version: **1.6**
+Current version: **1.7**
 
 ## License
 

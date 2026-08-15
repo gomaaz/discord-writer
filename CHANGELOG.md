@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.7
+
+- Added § 0 "When this skill applies". The skill had no activation rule at all: whether it fired was decided solely by the frontmatter `description`, which described capabilities rather than triggers.
+- Made Discord a hard activation condition. Discord must be named in the request or be unambiguous from context; once established in a conversation, follow-up requests inherit it.
+- Added explicit non-application: Discord bot and API development (`discord.py`, `discord.js`, embed JSON, slash commands, webhooks, gateway events), other platforms, general Markdown work, and plain questions about Discord as a product.
+- Rewrote the frontmatter `description` as a trigger description, since it is the only signal a skill host has when deciding whether to load the specification.
+- Ruled that an unclear case means not applying the skill, and not asking a clarifying question merely to justify applying it.
+
 ## 1.6
 
 - Added § 2.1 "Layout mode": `target.platform` now has a defined effect instead of a vague note. Each mode carries a concrete width budget, column budget and table policy, so a user can state that mobile does not matter and keep a wide table.
