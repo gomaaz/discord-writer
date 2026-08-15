@@ -24,7 +24,7 @@ Before changing anything, read:
 
 There is nothing to build or lint. Changes are verified by **rendering, not by running commands**:
 
-- `SKILL.md` § 18 holds the regression suite `R1`–`R13` (normal post, short `ALT → NEU`, long change, multi-dimensional record, `diff`, hybrid post, changelog, callout + status list, metadata + timestamp, links, layout mode, destination requirements, splitting mechanics). Each case has explicit acceptance criteria.
+- `SKILL.md` § 18 holds the regression suite `R1`–`R15` (normal post, short `OLD → NEW`, long change, multi-dimensional record, `diff`, hybrid post, changelog, callout + status list, metadata + timestamp, links, layout mode, destination requirements, splitting mechanics, literal characters, mentions). Each case has explicit acceptance criteria.
 - To "run a single test": produce the output for that case according to the changed rules and check it against that case's acceptance criteria — mentally for layout rules, in a real Discord client (desktop **and** mobile) for anything that touches rendering behavior.
 - § 26 is the pre-output quality checklist that applies to every generated message; § 31.6 adds the extra checklist for multi-component content.
 - Rules justified as "empirically tested" must not be changed on theory alone. New behavior claims need a new rendering test.
@@ -103,7 +103,9 @@ These rules come from real rendering tests on desktop and mobile. Treat them as 
 - `>>>` quotes the entire remainder of the message, so bounded multiline callouts prefix every line with `>`.
 - `[x]` / `[ ]` are not interactive Discord checkboxes; use Unicode `☑` / `☐`.
 - `<URL>` suppresses the link preview; masked links stay readable but may still generate an embed.
-- Discord timestamps `<t:...>` render in the reader's local time and are preferred for dates/times.
+- Discord timestamps `<t:...>` render in the reader's local time **and language** — a German client shows the relative form as "in 5 Tagen" inside an otherwise English message. Confirmed by capture.
+- Mention IDs, like Unix timestamps, must never be invented: a wrong ID fails silently by pointing at the wrong target instead of erroring (`SKILL.md` § 13.3).
+- Markdown characters inside a value (`_`, `*`, `~`, `|`) are a correctness issue, not a style one — protect with inline code or escape (`SKILL.md` § 4.1).
 - `➕` and `➖` render as thin, pale, low-contrast glyphs in the dark theme on mobile, while `🔄` and `🐛` carry strong color. Changelog defaults are therefore `✨ Added` / `🗑️ Removed` (`SKILL.md` § 5.3). Do not "restore" the plus/minus symbols as a tidiness fix — they were measured, not assumed.
 - No fake YAML/INI/CSS syntax highlighting as decoration — a neutral code block instead.
 - Discord's own limits (§ 2.2) are a different category from the width findings: 2,000 characters, 4,000 only for manual Nitro delivery, 1–100 character titles for forum/media posts, 6,000 across all embeds of one message. Never present one as the other — the width budgets are recommendations, these are hard limits.
@@ -173,6 +175,28 @@ When a file lands there:
 Because the source file stays, `SKILL.md` and `rules/` will drift over time. That is expected and acceptable: on any conflict, `SKILL.md` wins. Never "resync" the specification back to a source document.
 
 `rules/discord_destination_constraints.md` is the source for § 2.2, § 14.1 and § 14.2, integrated in 1.9.
+
+## Repository layout — keep the root clean
+
+The root directory is a closed set. These entries belong there and nothing else does:
+
+| Root entry | Why it stays there |
+| --- | --- |
+| `SKILL.md` | The single-skill plugin mechanism loads it from the root; moving it silently breaks the plugin |
+| `README.md`, `CHANGELOG.md`, `LICENSE`, `VERSION` | Repository conventions that readers and tooling expect at the top level |
+| `CLAUDE.md` | Claude Code reads it from the root |
+| `PROJECT_HANDOFF.md`, `GENERICITY.md` | Contributor entry points, deliberately kept visible at the top level |
+| `.claude-plugin/`, `.gitignore` | Manifests and VCS configuration |
+
+Everything else lives in a folder named after its purpose:
+
+- `assets/` — repository-level images such as the README banner
+- `examples/` — profile examples a user copies from
+- `rules/` — dropped-in rule sources, see the section above
+- `showcases/` — rendered demonstrations: `messages/` holds the message sources, `images/` the client captures
+- `templates/` — copyable skeletons kept in sync with the § 22.1 schema
+
+Do not add a new file to the root. Sort it into the folder that matches its purpose, and add a new folder only when no existing one fits — then list it here. Scratch files, drafts, capture leftovers and one-off notes do not belong in the repository at all; keep them in the session scratchpad. Remove empty folders instead of leaving them as placeholders.
 
 ## Repository goal
 

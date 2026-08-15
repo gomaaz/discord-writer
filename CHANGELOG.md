@@ -1,8 +1,18 @@
 # Changelog
 
+## 1.9
+
+- Added § 4.1 "Literal characters". The specification had **no rule for escaping at all**, so a value containing `_`, `*`, `~` or `|` could be silently reformatted — `user_name_field` arriving with an italic middle, `*.log` starting emphasis. Inline code is the primary protection, `\` the fallback where code formatting is wrong. This is a correctness rule, not a style one: a reader cannot tell that the text they see is not the text that was meant.
+- Added § 13.3 "Mentions". Previously mentioned once in passing despite being present in most announcements. Covers the syntax for user, role and channel mentions, and that a plain `@name` is not a mention at all.
+- Mention IDs join Unix timestamps under the never-invent rule. A wrong ID fails silently by pointing at the wrong target rather than erroring, so an unknown ID means asking or writing plain text — never a placeholder.
+- `@everyone` / `@here` are a decision, not formatting: emitted only on explicit request, never upgraded from `@here`, and never removed when the user wrote one.
+- Wired both into § 1, § 17 (new steps O2 and O3), § 26 (new "Literal text and mentions" checklist) and § 28 (rules 29 and 30).
+- Added regression cases R14 (literal characters) and R15 (mentions, three cases).
+
 ## 1.8.3
 
 - Added the nine showcase screenshots. Every gallery entry now shows real Discord rendering next to its source, and the README leads with the hybrid post and the desktop/phone pair.
+- The README now advertises the gallery instead of mentioning it: a one-line call to action above the fold, a thumbnail grid of all eight showcases linking into their sections, and a pointer from the capability list. Corrected the count — eight showcases, nine captures, where the README said nine of both.
 - Rendering test confirmed a stronger timestamp behavior than documented: Discord localizes the **language** as well as the offset. `<t:...:R>` renders as "in 5 Tagen" on a German client while the surrounding English message is untouched. Recorded in § 13.1 — writing times out by hand is strictly worse for any reader outside the author's zone.
 - The changelog capture confirms the 1.7 emoji decision: `✨` and `🗑️` stay legible in the dark theme where `➕` and `➖` washed out.
 

@@ -122,6 +122,8 @@ Choose the presentation not by what looks visually striking, but by what kind of
 | secondary information | subtext `-#` |
 | hidden content | spoiler `||...||` |
 | real code / configuration | matching real language tag |
+| value containing `*`, `_`, `~`, `\|` | inline code, or escaped with `\` (§ 4.1) |
+| addressing a person, role or channel | mention `<@id>` / `<@&id>` / `<#id>` (§ 13.3) |
 | semantic colors | do not use by default; ANSI only desktop-only / experimental |
 
 When several types of information occur together, a **hybrid post** may combine multiple of these formats.
@@ -458,6 +460,57 @@ Multiple bounded lines:
 **Important:** In Discord, `>>>` treats the entire remainder of the message as a multiline blockquote. Only use `>>>` if the **whole remaining message content** really should be quoted.
 
 If normal text should follow afterwards, use `>` for each individual quote line.
+
+---
+
+# 4.1 Literal characters: protect values from the formatter
+
+Markdown characters inside a *value* are a correctness problem, not a style question. Discord applies its formatter to everything outside code, so a value that happens to contain formatting characters is silently altered — and the reader has no way to tell that the text they see is not the text that was meant.
+
+Typical casualties:
+
+| Written | Risk |
+|---|---|
+| `user_name_field` | the underscores can be read as emphasis markers |
+| `*.log` | a leading `*` can start emphasis |
+| `2 * 3 * 4` | the asterisks pair up |
+| `C:\tools\new` | backslashes are consumed as escapes |
+| `a \| b` | a bare pipe inside a table row |
+| `#4711` | a `#` at the start of a line becomes a heading |
+| `- 5 °C` | a `-` at the start of a line becomes a list item |
+
+## Rule 1: inline code is the primary protection
+
+Anything inside `` ` `` or a code block is delivered literally. No escaping is needed there, and adding backslashes inside code would print them.
+
+```text
+- **Config:** `user_name_field`
+- **Pattern:** `*.log`
+- **Path:** `C:\tools\new`
+```
+
+This is the preferred fix, because it also marks the text as a value — which is what it is.
+
+## Rule 2: escape with `\` where code formatting is wrong
+
+Inline code is not always available or appropriate: headings, a callout sentence, running prose, or a profile with `values.inline_code: never`. There, escape the individual character:
+
+```text
+# Release 2.5 \_beta\_
+
+> ⚠️ **Warning**
+> The pattern \*.log no longer matches subfolders.
+```
+
+Characters worth escaping outside code: `*`, `_`, `~`, `` ` ``, `|`, `\`, and at the start of a line also `#`, `-`, `>`.
+
+## Rule 3: never let the formatter change the meaning
+
+Before emitting a value that came from the user, check whether it contains any of those characters. If it does, it belongs in inline code or gets escaped.
+
+The content rule from § 15 applies here too: names, numbers, units and signs must survive **exactly**. A build tag written as `2_5_beta` that arrives with an italicised middle is a factual error, not a layout detail — and unlike a broken layout, nobody reading it can tell that something went wrong.
+
+Do not go the other way either: never add backslashes to text that does not need them. Escapes are visible when they are wrong.
 
 ---
 
@@ -1038,6 +1091,57 @@ Note the trade-off: the compact `<URL>` form suppresses the embed but does not o
 
 ---
 
+# 13.3 Mentions
+
+Mentions render as interactive pills and — for people and roles — send a notification. They are the one element in a Discord message with a side effect beyond the text, so they get stricter rules than layout does.
+
+## Syntax
+
+```text
+<@123456789012345678>     user
+<@&123456789012345678>    role
+<#123456789012345678>     channel
+@everyone                 every member of the server
+@here                     every member currently online
+```
+
+The numeric form needs the real ID. **A plain `@name` is not a mention** — it renders as literal text and notifies nobody. Do not present it as one.
+
+## Hard rule: never invent an ID
+
+The same rule as for Unix timestamps (§ 13.1) and for values (§ 15): **do not fabricate IDs.** A wrong ID does not fail visibly — it silently points at a different user, role or channel, or renders as a dead pill.
+
+If a mention is wanted but the ID is unknown:
+
+- ask for it, or
+- write the name as plain text and say that the ID is missing
+
+Never emit a placeholder like `<@000000000000000000>` in a message meant to be pasted. It looks finished and is not.
+
+If the user supplies IDs, use them unchanged. Do not reformat, shorten or "correct" them.
+
+## `@everyone` and `@here` are a decision, not a formatting choice
+
+They notify an entire server. Use them **only when the user asked for them explicitly.** Do not add one because a post feels important, and do not upgrade `@here` to `@everyone`.
+
+If the user asks for a broad ping and the server is unknown to you, emit exactly what they asked for and nothing more.
+
+Removing one is equally off-limits: if the user wrote `@everyone`, keep it.
+
+## Placement and formatting
+
+- Mentions must stay **outside** code blocks and inline code. Inside, they render as literal text — the same reason metadata blocks are not fenced (§ 13.1).
+- A mention at the very start of a message reads as addressing; at the end it reads as a note. Both are valid; keep it deliberate.
+- Do not stack several role mentions in a heading. One line of addressing is enough.
+- Channel mentions `<#id>` are better than a raw channel link when the target is a channel: they are shorter, they render as a pill, and they cannot break.
+- Mentions count toward the character limit at **full syntax length**, not at rendered length (§ 14.2).
+
+## Style profiles
+
+A profile may state a default addressing pattern — for example "release posts open with a role mention" — but a profile can never introduce an ID the user has not supplied, and never turn on `@everyone` by default.
+
+---
+
 # 14. Splitting long posts sensibly
 
 A long Discord post may scroll. Height alone is not a defect.
@@ -1282,6 +1386,14 @@ Establish this next — it changes the answers to F, G and H. Default `desktop-f
 
 → `[Name](URL)` for readable links; `<URL>` when the preview should be suppressed.
 
+## O2. Does a value contain Markdown characters?
+
+→ inline code, or `\` escape where code formatting is wrong (§ 4.1). Never leave the formatter free to alter a value.
+
+## O3. Should someone be addressed or notified?
+
+→ mention with the ID the user supplied (§ 13.3). No ID given → plain text plus a note, never an invented one. `@everyone` only on explicit request.
+
 ## P. Does it contain real code or real configuration?
 
 → real language tag.
@@ -1451,6 +1563,28 @@ Acceptance, in four parts:
 2. The code fence is closed before the cut and reopened after it. No message ends with an open fence.
 3. Each message is understandable on its own.
 4. Both messages, continuation labels included, stay within 2,000 characters — measured on the finished text, not estimated (§ 14.2).
+
+---
+
+## R14 – Literal characters
+
+Input values: `user_name_field`, `*.log`, `C:\tools\new`, `2 * 3`.
+
+Acceptance: every value arrives unaltered. Nothing renders as italics or bold, no backslash is visible in the output, and no character has gone missing. Inline code is the expected solution; an escape is acceptable where inline code does not fit.
+
+## R15 – Mentions
+
+Case A: the user supplies `<@&987654321098765432>` and asks for a release post addressed to that role.
+
+Acceptance: the ID is emitted unchanged, outside any code block, and renders as a pill.
+
+Case B: the user asks for a post "addressed to the moderators" without giving an ID.
+
+Acceptance: no invented ID and no placeholder. The name appears as plain text, with a short note that the ID is needed for a real mention.
+
+Case C: neither case mentions `@everyone`.
+
+Acceptance: `@everyone` does not appear. Conversely, when the user writes it, it survives.
 
 ---
 
@@ -2014,6 +2148,15 @@ Applies when composing for `mobile-first`; use the wider budget from § 2.1 for 
 - [ ] Are long changes presented as a Hanging Change?
 - [ ] Is a table understandable without desktop width, where mobile matters?
 
+## Literal text and mentions
+
+- [ ] Does any value contain `*`, `_`, `~`, `` ` ``, `|` or `\` — and is it protected by inline code or escaped (§ 4.1)?
+- [ ] Do numbers, versions, paths and field names survive exactly as supplied?
+- [ ] Were backslashes added only where they are needed, so none show up in the output?
+- [ ] Is every mention built from an ID the user actually supplied?
+- [ ] Is `@everyone` / `@here` present only because it was explicitly requested — and preserved if it was?
+- [ ] Are mentions outside code blocks, where they can render?
+
 ## Discord syntax
 
 - [ ] Is `>>>` used only when the remaining message content should be quoted?
@@ -2119,6 +2262,8 @@ Rules:
 26. **Profiles may define compact, balanced or spacious as well as emoji, change, link, timestamp and splitting styles.**
 27. **With long or unsuitable content, switch to a more robust format automatically.**
 28. **Plain-language guidelines and YAML profiles are equally valid input forms.**
+29. **Protect values containing Markdown characters with inline code, or escape them — the formatter must never change a value (§ 4.1).**
+30. **Never invent a mention ID, and never add `@everyone` on your own initiative (§ 13.3).**
 29. **The destination sets the limits: 2,000 characters by default, a required 1–100 character title for forum and media posts, never an invented tag (§ 2.2).**
 30. **Count the finished text, not the draft — validate after formatting, never before (§ 14.2).**
 31. **Repair by rearranging; never by removing information or inventing what is missing.**
