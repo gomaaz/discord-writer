@@ -12,11 +12,11 @@ It focuses on information structure rather than a specific game, product, brand,
 
 ## See it in action
 
-Every block below is real skill output, shown exactly as it arrives — and next to it, how Discord renders it.
+Two highlights below. The full **[showcase gallery](showcases/)** has nine, each with the raw input, the exact output and a screenshot of how Discord renders it.
 
-### 1. One post, six formats
+### One post, six formats
 
-This is the flagship case. A release announcement that combines a heading, running text, a change list, a colored `diff`, a warning callout, a live timestamp and a subtext footer — in a **single** message that still holds together on a phone.
+Native Markdown, a compact change list, a `diff`, a callout, a timestamped metadata line and a subtext footer — in **one** message that still holds together on a phone.
 
 **You type:**
 
@@ -54,11 +54,11 @@ Bulk export is live, and sync no longer needs a human.
 -# Existing exports stay available for 30 days.
 ````
 
-Six presentation formats in one message — native Markdown, a compact change list, a `diff`, a callout, a timestamped metadata line and a subtext footer. Each was chosen because of what the information *is*, not because it looked good.
+Each format was chosen because of what the information *is*, not because it looked good. Note the four outer backticks: the message itself contains three, and this is the transport rule (§ 3) that keeps them alive through copy/paste.
 
-### 2. The table trap
+### The table trap
 
-This is the single most common way Discord posts break on mobile. Four columns fit your monitor and destroy a phone screen:
+The most common way Discord posts break on mobile. Four columns fit a monitor and destroy a phone screen:
 
 ```text
 SERVICE     STATUS   VERSION   LATENCY
@@ -66,7 +66,7 @@ API         Online   3.2.1     42 ms
 Database    Online   14.6      18 ms
 ```
 
-The skill turns the same data into stacked records instead:
+By default the same data becomes stacked records instead:
 
 ```text
 API
@@ -80,122 +80,11 @@ Version:  14.6
 Latency:  18 ms
 ```
 
-Code block lines are planned at **≤ 36 visible characters**, measured from actual Discord rendering tests on mobile.
+Code block lines are planned at **≤ 36 visible characters**, measured from actual rendering tests on mobile.
 
-### 3. Color that survives copy/paste
+But that is a default, not a cage — tell the skill your channel is read on desktop and the table survives, at a wider budget. See [Layout mode](#mobile-first-is-a-default) below.
 
-A `diff` block is the one place Discord gives you real red and green without hacks — and it still reads correctly for anyone who cannot see color, because `-` and `+` carry the meaning too.
-
-````text
-```diff
-- Manual retry after failure
-- Status page updated by hand
-
-+ Automatic retry with backoff
-+ Live status from health checks
-```
-````
-
-ANSI color blocks exist, but they did **not** render on the tested mobile client. The skill treats them as desktop-only and never picks them automatically.
-
-### 4. Before and after, at a glance
-
-When one change matters more than the rest, it gets a stacked card instead of a bullet:
-
-```text
-## ⭐ Key change
-
-**Access control**
-
-🔴 **Before**
-`Individual user permissions`
-
-🟢 **After**
-`Role-based permissions`
-```
-
-`Before` and `After` stay spelled out. The color is an accent, never the message.
-
-### 5. Timestamps that adapt to the reader
-
-This is the trick most Discord posts miss. Write the time once, and every reader sees it in **their own** time zone — with a live countdown that keeps updating:
-
-```text
-# 📅 Maintenance window
-
-**Environment:** `Production`
-**Starts:** <t:1787241600:f>
-**Countdown:** <t:1787241600:R>
-**Duration:** ~2 h
-
-> ℹ️ **Information**
-> Read access stays available throughout.
-```
-
-That timestamp resolves to 16:00 UTC. A reader in Berlin sees 18:00, one in New York sees 12:00, and both see the same live countdown next to it — from the exact same message text. No "18:00 CEST (12:00 EDT)" gymnastics, and nothing to correct when the date moves.
-
-### 6. Release notes → changelog categories
-
-**You type:**
-
-```text
-2.5.0 shipped. new bulk export and a dark theme. session timeout went
-from 30 to 45 minutes. dropped the old CSV importer. fixed the crash
-on empty search.
-```
-
-**You paste into Discord:**
-
-```text
-# 🚀 Release 2.5.0
-
-## ✨ Added
-- Bulk export
-- Dark theme
-
-## 🔄 Changed
-- **Session timeout:** ~~`30 min`~~ → `45 min`
-
-## 🗑️ Removed
-- Legacy CSV importer
-
-## 🐛 Fixed
-- Crash on empty search
-```
-
-Only categories that actually have content are emitted — no empty `Removed` heading just because the template has one.
-
-### 7. Live status without a table
-
-```text
-## Service status
-
-🟢 **API** — Online · `42 ms`
-🟢 **Database** — Online · `18 ms`
-🟡 **Cache** — Degraded · `91 ms`
-🔴 **Backup** — Failed
-```
-
-The state is always written as text too. The emoji never carries the meaning on its own.
-
-### 8. Long changes stay unambiguous
-
-A long `OLD → NEW` pair would blow past the width budget on one line, so it becomes a stacked hanging change:
-
-````text
-## Access control
-
-```
-Access control
-  Individual permissions
-  → Role-based permissions
-```
-
-> ⚠️ **Warning**
-> This change requires a restart.
-````
-
-Note that examples 1, 3 and 8 are wrapped in **four** backticks, because the Discord message itself contains three. That is the transport rule (§ 3), and it is why the skill hands you output that way in a chat interface: the inner backticks survive copy/paste instead of being swallowed by ChatGPT or Claude.
+**→ [Browse all nine showcases](showcases/)**
 
 ---
 
@@ -298,6 +187,31 @@ Ready-made starting points: [`templates/GUIDELINE-TEMPLATE.yaml`](templates/GUID
 
 To have the skill build one for you, ask: `Help me create a Discord style guideline.`
 
+## Mobile-first is a default
+
+Most Discord reading happens on a phone, so that is what the skill optimizes for by default. But your channel might not be like that — and then a table is genuinely the better layout, not a mistake to be corrected.
+
+`target.platform` decides how strictly narrow screens are respected:
+
+| | `mobile-first` (default) | `balanced` | `desktop-first` |
+|---|---|---|---|
+| Code block width | ≤ 36 chars | ≤ 48 chars | ≤ 80 chars |
+| Logical columns | 2 | up to 3–4 short ones | as many as the data needs |
+| A wide table | becomes stacked records | kept when compact | **kept as a table** |
+
+You do not need a profile for it. Any of these works for a single message:
+
+```text
+This channel is read on desktop, keep the table.
+Mobile does not matter here.
+```
+
+And if you ask for a wide table without setting a mode, you get the table — plus one short line noting that it will scroll horizontally on phones. The skill will not silently refuse the layout you asked for, and it will not silently hand you one that breaks for half your readers.
+
+What `desktop-first` does **not** unlock: fake syntax highlighting for color, ANSI as an automatic choice, invented columns to fill a table, or exceeding Discord's character limit. Those are correctness rules, not width preferences. Details in [`SKILL.md`](SKILL.md) § 2.1.
+
+One thing worth knowing: Discord has no native Markdown table rendering at all. A `| a | b |` row shows up as literal text with pipes. So "keeping a table" always means an aligned monospace code block — `desktop-first` only changes how wide it may get.
+
 ---
 
 ## What it does
@@ -342,13 +256,15 @@ discord-writer/
 ├── VERSION
 ├── assets/
 │   └── banner.png
+├── showcases/
+│   ├── README.md            # the gallery
+│   └── images/
 ├── templates/
 │   ├── GUIDELINE-TEMPLATE.yaml
 │   └── CONTENT-PROFILE-TEMPLATE.yaml
 └── examples/
     ├── PROFILE-EXAMPLES.md
-    ├── COMPONENT-SET-PROFILE-EXAMPLE.yaml
-    └── SCREENSHOT-SOURCES.md
+    └── COMPONENT-SET-PROFILE-EXAMPLE.yaml
 ```
 
 ## Working on this repository
@@ -363,7 +279,7 @@ The specification is written in English. That does not determine the output lang
 
 ## Version
 
-Current version: **1.5**
+Current version: **1.6**
 
 ## License
 
