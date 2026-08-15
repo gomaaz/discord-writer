@@ -1,0 +1,25 @@
+discord_writer:
+  content_profiles:
+    component-set:
+      enabled: true
+      purpose: "Multiple related components or entries with properties"
+      terminology: inherit
+      density: balanced
+      intro: short
+      primary_layout: record
+      grouping: semantic-auto
+      field_policy: preserve-source
+
+      record:
+        heading: best-identifier
+        omit_missing: true
+        compact_short_properties: auto
+
+      context:
+        enabled: auto
+
+      alternatives:
+        enabled: optional
+
+      splitting:
+        mode: thread-friendly

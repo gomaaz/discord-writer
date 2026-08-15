@@ -1,0 +1,21 @@
+# Reusable, domain-neutral content profile template for discord-writer v1.5
+# Add this under discord_writer.content_profiles in a guideline.
+
+<profile_name>:
+  enabled: true
+  purpose: "Describe the recurring information shape, not a brand/domain"
+  density: inherit               # inherit | compact | balanced | spacious
+  terminology: inherit           # inherit | localized | preserve-original | mixed
+  intro: short                   # none | short | detailed
+  primary_layout: auto
+  grouping: auto
+  field_policy: preserve-source
+
+  # Optional: preferred logical sections. Empty sections are never rendered.
+  section_order: []
+
+  # Add only GENERIC behavior here.
+  # Domain-specific field names belong in a user's own guideline, not the base skill.
+
+  splitting:
+    mode: inherit                # inherit | single-message | thread-friendly | aggressive-split | auto

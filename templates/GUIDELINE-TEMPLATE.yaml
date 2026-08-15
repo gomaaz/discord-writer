@@ -1,0 +1,153 @@
+discord_writer:
+  profile: "my-discord-style"
+
+  target:
+    platform: mobile-first       # mobile-first | balanced | desktop-first
+    density: balanced            # compact | balanced | spacious
+
+  language:
+    locale: en                   # output language of the Discord message
+    tone: neutral                # neutral | technical | casual | community | executive
+    verbosity: concise           # terse | concise | detailed
+    terminology: mixed           # localized | preserve-original | mixed
+
+  adaptation:
+    policy: silent-safe          # silent-safe | explain-on-deviation | strict
+
+  headings:
+    h1: true
+    max_depth: 2
+    emoji: functional            # none | minimal | functional | visual
+    short_titles: true
+
+  changes:
+    default: auto                # auto | compact-list | strikethrough | hanging | card | diff
+    replacement: strikethrough   # compact-list | strikethrough | hanging | card | auto
+    important: card              # card | hanging | compact-list | auto
+    added_removed: diff          # diff | changelog | list | auto
+    card_max_items: 3
+
+  # Labels below are the English defaults.
+  # Translate them when language.locale is a different language.
+  changelog:
+    enabled: true
+    categories:
+      new: "➕ Added"
+      changed: "🔄 Changed"
+      removed: "➖ Removed"
+      fixed: "🐛 Fixed"
+      performance: "⚡ Performance"
+      security: "🔒 Security"
+      breaking: "⚠️ Breaking Change"
+      docs: "📚 Documentation"
+
+  status:
+    style: emoji-text            # emoji-text | text-only | custom
+    ok: "🟢"
+    warning: "🟡"
+    error: "🔴"
+    unknown: "⚪"
+    progress: "🔵"
+
+  callouts:
+    enabled: true
+    info: "ℹ️ Information"
+    warning: "⚠️ Warning"
+    success: "✅ Success"
+    error: "❌ Error"
+    tip: "💡 Tip"
+    security: "🔒 Security"
+
+  values:
+    inline_code: technical-only  # always | technical-only | never | auto
+    strikethrough_old: true
+
+  timestamps:
+    enabled: true
+    datetime: f                  # t | T | d | D | f | F
+    relative: R
+    show_relative_when_useful: true
+
+  links:
+    mode: auto                   # auto | named | compact | raw
+    previews: auto               # allow | suppress | auto
+    label_emoji: true
+
+  checklist:
+    style: unicode               # unicode | emoji | plain
+    done: "☑"
+    open: "☐"
+
+  codeblocks:
+    mobile_target_width: 36
+    mobile_soft_max_width: 40
+    allow_wide_tables: false
+
+  splitting:
+    mode: auto                   # single-message | thread-friendly | aggressive-split | auto
+    target_chars: 1800
+    hard_chars: 2000
+
+  output:
+    transport: fenced            # fenced | raw
+    outer_fence: 4
+
+  # Optional: recurring, DOMAIN-NEUTRAL information shapes.
+  # Only enable those that are actually needed regularly.
+  content_profiles:
+    component-set:
+      enabled: false
+      purpose: "Multiple related components or entries with properties"
+      density: inherit
+      terminology: inherit
+      intro: short
+      primary_layout: record
+      grouping: semantic-auto
+      field_policy: preserve-source
+      record:
+        heading: best-identifier
+        omit_missing: true
+        compact_short_properties: auto
+      context:
+        enabled: auto
+      alternatives:
+        enabled: optional
+      splitting:
+        mode: thread-friendly
+
+    changelog:
+      enabled: false
+      primary_layout: changelog
+      highlight_replacements: strikethrough
+      important_change: card
+
+    procedure:
+      enabled: false
+      primary_layout: native
+      steps: numbered
+      warnings: callout
+
+    schedule:
+      enabled: false
+      primary_layout: metadata
+      timestamps: true
+      relative_time: true
+
+    status:
+      enabled: false
+      primary_layout: status-list
+      details_layout: record
+
+    comparison:
+      enabled: false
+      primary_layout: auto
+      wide_matrix: false
+
+    faq:
+      enabled: false
+      primary_layout: native
+
+    reference-list:
+      enabled: false
+      primary_layout: native
+      links: named
