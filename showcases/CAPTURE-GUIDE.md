@@ -2,6 +2,9 @@
 
 Everything needed to produce the nine screenshots for the gallery.
 
+> **All nine are captured and placed.** Follow this only to redo a shot, or when
+> adding a showcase.
+
 The messages are **files**, not code blocks on this page: open the file, select
 all, copy, paste into Discord. Nothing to trim, nothing to accidentally include.
 

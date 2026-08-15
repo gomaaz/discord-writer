@@ -54,7 +54,11 @@ Bulk export is live, and sync no longer needs a human.
 -# Existing exports stay available for 30 days.
 ````
 
-Each format was chosen because of what the information *is*, not because it looked good. Note the four outer backticks: the message itself contains three, and this is the transport rule (§ 3) that keeps them alive through copy/paste.
+**Discord renders it like this:**
+
+![Hybrid post rendered in Discord](showcases/images/01-hybrid-post.png)
+
+Each format was chosen because of what the information *is*, not because it looked good. Note the four outer backticks above: the message itself contains three, and this is the transport rule (§ 3) that keeps them alive through copy/paste.
 
 ### One layout, two screens
 
@@ -79,6 +83,12 @@ Status:   Online
 Version:  14.6
 Latency:  18 ms
 ```
+
+Side by side, on the two screens they were made for:
+
+| Desktop, the default | Phone, on request |
+|---|---|
+| ![Four-column table on desktop](showcases/images/02a-table-desktop.png) | ![Stacked records on a phone](showcases/images/02b-records-mobile.png) |
 
 The mobile budget of **≤ 36 visible characters** comes from actual rendering tests. It applies when you ask for it — see [Screen priority](#screen-priority) below.
 

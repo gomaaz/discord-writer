@@ -302,6 +302,15 @@ Constructing the embed itself — the JSON object, the library call, the bot tha
 
 Two things behave differently inside an embed. Discord's 6,000-character budget is the **sum across all embeds of one message**, never 6,000 per embed. And the normal message content around the embeds keeps its own separate 2,000-character limit; the two budgets do not offset each other.
 
+When embed text exceeds a limit, work down this order and stop at the first step that fits:
+
+1. shorten decorative or redundant wording
+2. split a long section into several fields
+3. distribute the content across several embeds
+4. distribute the embeds across several messages
+
+Never skip to truncation. Substantive content is only shortened when the user asked for it to be shortened (§ 14.2).
+
 ## Attachment size is environment-dependent
 
 Do not state an upload size limit as a Discord fact. It varies by account, subscription, client and Discord's own changes. When file size matters, say that it depends on the account and the current client, or read the value from the environment — never quote one account's limit as a universal rule.
@@ -964,6 +973,8 @@ Rules:
 ## Discord timestamps
 
 When an unambiguous point in time is known, prefer Discord timestamps so that Discord renders date/time locally for each user.
+
+Confirmed by rendering test: the client localizes both the **offset and the language**. A German client shows `<t:...:f>` as `20. August 2026 18:00` and `<t:...:R>` as `in 5 Tagen`, while the surrounding message text stays in the language it was written in. So a timestamp needs no translation and no "18:00 CEST (12:00 EDT)" note — writing the time out by hand is strictly worse for every reader outside your own zone.
 
 Important forms:
 

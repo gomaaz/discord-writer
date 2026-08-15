@@ -6,28 +6,23 @@ Each showcase is one message: the rough input, the raw text the skill produces,
 and a screenshot of how Discord renders it. Everything here is real output, not
 a mockup.
 
-> **Screenshots pending.** The sources below are final; no captures exist yet.
-> [`CAPTURE-GUIDE.md`](CAPTURE-GUIDE.md) has the whole job in order. The blocks on
-> this page are for reading — to actually post one, copy the matching file from
-> [`messages/`](messages/), which holds the raw text with no fence around it.
+Every screenshot below is a real Discord client rendering the raw text shown
+above it — dark theme, desktop unless marked otherwise. To reproduce one, copy
+the matching file from [`messages/`](messages/) and paste it into a channel;
+[`CAPTURE-GUIDE.md`](CAPTURE-GUIDE.md) describes the setup.
 
 ## Overview
 
-| | Showcase | Screenshot | Device |
-|---|---|---|---|
-| 01 | [One post, six formats](#01--one-post-six-formats) | `01-hybrid-post.png` | desktop |
-| 02 | [Screen priority](#02--screen-priority) | `02a-table-desktop.png` + `02b-records-mobile.png` | both |
-| 03 | [Color that survives copy/paste](#03--color-that-survives-copypaste) | `03-diff.png` | desktop |
-| 04 | [Before and after](#04--before-and-after) | `04-change-card.png` | desktop |
-| 05 | [Timestamps that adapt](#05--timestamps-that-adapt-to-the-reader) | `05-timestamps.png` | desktop |
-| 06 | [Release notes](#06--release-notes) | `06-changelog.png` | desktop |
-| 07 | [Live status](#07--live-status) | `07-status-list.png` | desktop |
-| 08 | [Long changes](#08--long-changes) | `08-hanging-callout.png` | desktop |
-
-Nine captures for eight showcases — 02 needs both screens, because the pair *is*
-the showcase. Everything else is captured on desktop, which is what the
-`desktop-first` default produces (`SKILL.md` § 2). See
-[Capturing](#capturing) for the settings.
+| | Showcase | Shows |
+|---|---|---|
+| 01 | [One post, six formats](#01--one-post-six-formats) | Heading, prose, change list, diff, callout, timestamp and subtext in a single message |
+| 02 | [Screen priority](#02--screen-priority) | The same data as a desktop table and as mobile records |
+| 03 | [Color that survives copy/paste](#03--color-that-survives-copypaste) | `diff` with real red and green, readable without color too |
+| 04 | [Before and after](#04--before-and-after) | Change card for the one change that matters |
+| 05 | [Timestamps that adapt](#05--timestamps-that-adapt-to-the-reader) | One text, every reader sees their own time zone *and language* |
+| 06 | [Release notes](#06--release-notes) | Changelog categories, only the ones with content |
+| 07 | [Live status](#07--live-status) | Status list with color *and* text |
+| 08 | [Long changes](#08--long-changes) | Hanging change plus a warning callout |
 
 ---
 
@@ -72,6 +67,8 @@ Bulk export is live, and sync no longer needs a human.
 -# Existing exports stay available for 30 days.
 `````
 
+![Hybrid post rendered in Discord](images/01-hybrid-post.png)
+
 Each format was chosen because of what the information *is* — not because it
 looked good.
 
@@ -90,6 +87,8 @@ Database    Online     14.6      18 ms
 Cache       Degraded   7.0.5     91 ms
 ```
 `````
+
+![Four-column table on desktop](images/02a-table-desktop.png)
 
 Because that is wide enough to break on a phone, the reply ends with one short
 line — and only then. A compact list or a callout reflows fine and gets no such
@@ -121,9 +120,10 @@ Latency:  91 ms
 ```
 `````
 
-The pair is the showcase: capture the table on desktop (`02a-table-desktop.png`)
-and the records on a phone (`02b-records-mobile.png`). The structure is offered,
-never taken away unasked.
+![The same data as stacked records on a phone](images/02b-records-mobile.png)
+
+The pair is the showcase — the first shot is a desktop client, the second a
+phone. The structure is offered, never taken away unasked.
 
 ---
 
@@ -142,6 +142,8 @@ too.
 + Live status from health checks
 ```
 `````
+
+![diff block rendering red and green](images/03-diff.png)
 
 ANSI color blocks exist but did **not** render on the tested mobile client. The
 skill treats them as desktop-only and never picks them automatically.
@@ -165,6 +167,8 @@ bullet.
 `Role-based permissions`
 ````
 
+![Change card with before and after](images/04-change-card.png)
+
 `Before` and `After` stay spelled out. The color is an accent, never the message.
 
 ---
@@ -186,8 +190,15 @@ countdown.
 > Read access stays available throughout.
 ````
 
-That timestamp is 2026-08-20 16:00 UTC: Berlin sees 18:00, New York sees 12:00.
-Once the date has passed, substitute a future one before capturing.
+![Metadata block with rendered timestamps](images/05-timestamps.png)
+
+That timestamp is 2026-08-20 16:00 UTC, and the capture was taken from a Berlin
+client — which is why it reads 18:00. A New York reader sees 12:00 from the same
+message text.
+
+Note the countdown: **"in 5 Tagen"**. Discord localizes the *language* too, not
+just the offset, and the surrounding message stays English. One more reason to
+write times as `<t:...>` rather than spelling them out.
 
 ---
 
@@ -210,9 +221,11 @@ Once the date has passed, substitute a future one before capturing.
 - Crash on empty search
 ````
 
+![Changelog categories rendered in Discord](images/06-changelog.png)
+
 Only categories with actual content are emitted. The category emoji are chosen
-for contrast in the dark theme (`SKILL.md` § 5.3) — if a capture shows `✨` or
-`🗑️` washing out, that is a finding worth reporting.
+for contrast in the dark theme (`SKILL.md` § 5.3): this capture is the check, and
+`✨` and `🗑️` hold up where `➕` and `➖` washed out.
 
 ---
 
@@ -226,6 +239,8 @@ for contrast in the dark theme (`SKILL.md` § 5.3) — if a capture shows `✨` 
 🟡 **Cache** — Degraded · `91 ms`
 🔴 **Backup** — Failed
 ````
+
+![Status list with colored dots and text](images/07-status-list.png)
 
 The state is always written as text too. The emoji never carries the meaning on
 its own.
@@ -249,6 +264,8 @@ Access control
 > ⚠️ **Warning**
 > This change requires a restart.
 `````
+
+![Hanging change and warning callout on a phone](images/08-hanging-callout.png)
 
 ---
 

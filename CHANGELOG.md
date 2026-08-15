@@ -1,9 +1,10 @@
 # Changelog
 
-## 1.8.2
+## 1.8.3
 
-- Added `showcases/messages/`: one file per showcase message, holding the Discord raw text with no fence around it. Testing showed why — pasting from a fenced block on a documentation page pulls the outer backticks along, which turns the whole post into a code block and breaks any message containing its own ``` block.
-- `CAPTURE-GUIDE.md` now links the files instead of embedding blocks to be trimmed by hand. Select all, copy, paste.
+- Added the nine showcase screenshots. Every gallery entry now shows real Discord rendering next to its source, and the README leads with the hybrid post and the desktop/phone pair.
+- Rendering test confirmed a stronger timestamp behavior than documented: Discord localizes the **language** as well as the offset. `<t:...:R>` renders as "in 5 Tagen" on a German client while the surrounding English message is untouched. Recorded in § 13.1 — writing times out by hand is strictly worse for any reader outside the author's zone.
+- The changelog capture confirms the 1.7 emoji decision: `✨` and `🗑️` stay legible in the dark theme where `➕` and `➖` washed out.
 
 ## 1.9
 
@@ -19,6 +20,11 @@
 - § 28 short form grew from 28 to 31 rules.
 - Corrected the `SKILL.md` size quoted in § 0 and the README install instructions: ~57 KB → ~82 KB. It had been stale since 1.5.
 - Source of these rules: `rules/discord_destination_constraints.md`, kept as the origin document. `SKILL.md` remains canonical.
+
+## 1.8.2
+
+- Added `showcases/messages/`: one file per showcase message, holding the Discord raw text with no fence around it. Testing showed why — pasting from a fenced block on a documentation page pulls the outer backticks along, which turns the whole post into a code block and breaks any message containing its own ``` block.
+- `CAPTURE-GUIDE.md` now links the files instead of embedding blocks to be trimmed by hand. Select all, copy, paste.
 
 ## 1.8.1
 
