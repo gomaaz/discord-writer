@@ -9,6 +9,7 @@
 - Changed the schema default `language.locale` from `de` to `en`.
 - Translated all example content in the specification (change cards, hybrid post, status lists, checklists, regression cases) while preserving the mobile width budget of ≤ 36 characters for code block examples.
 - Added the MIT license and published the repository.
+- Reworked `README.md`: worked examples of real skill output up front, separate installation instructions for Claude Code, Claude and ChatGPT, and a header image.
 
 ## 1.4
 
