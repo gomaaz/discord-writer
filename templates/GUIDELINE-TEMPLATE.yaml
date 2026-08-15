@@ -29,12 +29,13 @@ discord_writer:
 
   # Labels below are the English defaults.
   # Translate them when language.locale is a different language.
+  # Emoji with strong own color are deliberate — see SKILL.md § 5.3.
   changelog:
     enabled: true
     categories:
-      new: "➕ Added"
+      new: "✨ Added"
       changed: "🔄 Changed"
-      removed: "➖ Removed"
+      removed: "🗑️ Removed"
       fixed: "🐛 Fixed"
       performance: "⚡ Performance"
       security: "🔒 Security"

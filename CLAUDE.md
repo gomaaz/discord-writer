@@ -100,8 +100,25 @@ These rules come from real rendering tests on desktop and mobile. Treat them as 
 - `[x]` / `[ ]` are not interactive Discord checkboxes; use Unicode `☑` / `☐`.
 - `<URL>` suppresses the link preview; masked links stay readable but may still generate an embed.
 - Discord timestamps `<t:...>` render in the reader's local time and are preferred for dates/times.
+- `➕` and `➖` render as thin, pale, low-contrast glyphs in the dark theme on mobile, while `🔄` and `🐛` carry strong color. Changelog defaults are therefore `✨ Added` / `🗑️ Removed` (`SKILL.md` § 5.3). Do not "restore" the plus/minus symbols as a tidiness fix — they were measured, not assumed.
 - No fake YAML/INI/CSS syntax highlighting as decoration — a neutral code block instead.
 - Transport rule (§ 3): every finished Discord message is wrapped in **four** outer backticks so inner triple backticks survive copy/paste. The outer fence is the AI surface's container, not part of the Discord content. Multiple messages get one container each.
+
+## README and specification must not contradict each other
+
+`SKILL.md` is canonical, but `README.md` is what people read first and copy from. Every example, default label and factual claim in the README must match the specification exactly.
+
+Tokens that must be identical everywhere they appear — `README.md`, `SKILL.md` (rule, schema § 22.1 and regression case), `templates/GUIDELINE-TEMPLATE.yaml`, `examples/SCREENSHOT-SOURCES.md`:
+
+- changelog category labels and their emoji
+- callout labels, status wording and symbols
+- the mobile width budget (36 / 40 / 44)
+- the `SKILL.md` file size quoted in the install instructions
+- section numbers referenced by prose
+
+After changing either file, grep the other for the same tokens. A README improvement is not finished until the specification carries the same value — otherwise readers get output that does not match what the skill produces, and it is unclear which of the two is wrong.
+
+The README's worked examples double as documentation of the defaults. If an example there looks better than the specification's default, that is a signal to change the default (with a rendering result to back it), not to let the two drift.
 
 ## Change discipline
 

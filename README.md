@@ -12,83 +12,51 @@ It focuses on information structure rather than a specific game, product, brand,
 
 ## See it in action
 
-Every example below is real skill output. The left side is what you type; the right side is what you paste into Discord.
+Every block below is real skill output, shown exactly as it arrives — and next to it, how Discord renders it.
 
-### 1. Value changes → compact list
+### 1. One post, six formats
 
-**You type:**
-
-```text
-timeout goes from 30 to 45 seconds, max connections 100 to 150,
-sync is automatic now instead of manual, and status is stable, was beta
-```
-
-**You paste into Discord:**
-
-```text
-## Configuration changes
-
-- **Timeout:** `30 s` → `45 s`
-- **Connections:** `100` → `150`
-- **Sync:** `Manual` → `Automatic`
-- **Status:** `Beta` → `Stable`
-```
-
-No table, no fixed column widths — the lines re-wrap naturally on a phone.
-
-### 2. Release notes → changelog categories
+This is the flagship case. A release announcement that combines a heading, running text, a change list, a colored `diff`, a warning callout, a live timestamp and a subtext footer — in a **single** message that still holds together on a phone.
 
 **You type:**
 
 ```text
-2.5.0 shipped. new bulk export and a dark theme. session timeout went
-from 30 to 45 minutes. dropped the old CSV importer. fixed the crash
-on empty search.
+2.5.0 is out, bulk export is live and sync is automatic now. timeout 30 to 45
+seconds. we replaced the manual CSV import with a scheduled bulk export.
+first run is tonight, might take an hour. rollout aug 20 19:00. old exports
+stay for 30 days.
 ```
 
 **You paste into Discord:**
 
-```text
+````text
 # 🚀 Release 2.5.0
 
-## ➕ Added
-- Bulk export
-- Dark theme
+Bulk export is live, and sync no longer needs a human.
 
-## 🔄 Changed
-- **Session timeout:** ~~`30 min`~~ → `45 min`
+## Changes
 
-## ➖ Removed
-- Legacy CSV importer
+- **Timeout:** `30 s` → `45 s`
+- **Sync:** `Manual` → `Automatic`
 
-## 🐛 Fixed
-- Crash on empty search
+## Replaced
+
+```diff
+- Manual CSV import
++ Scheduled bulk export
 ```
 
-Only categories that actually have content are emitted — no empty `Removed` heading just because the template has one.
+> ⚠️ **Warning**
+> The first run starts tonight and may take an hour.
 
-### 3. Many objects, one state each → status list
+**Rollout:** <t:1787241600:R>
 
-**You type:**
+-# Existing exports stay available for 30 days.
+````
 
-```text
-api online 42ms, database online 18ms, cache degraded at 91ms, backup failed
-```
+Six presentation formats in one message — native Markdown, a compact change list, a `diff`, a callout, a timestamped metadata line and a subtext footer. Each was chosen because of what the information *is*, not because it looked good.
 
-**You paste into Discord:**
-
-```text
-## Service status
-
-🟢 **API** — Online · `42 ms`
-🟢 **Database** — Online · `18 ms`
-🟡 **Cache** — Degraded · `91 ms`
-🔴 **Backup** — Failed
-```
-
-The state is always written as text too. The emoji never carries the meaning on its own.
-
-### 4. The table trap
+### 2. The table trap
 
 This is the single most common way Discord posts break on mobile. Four columns fit your monitor and destroy a phone screen:
 
@@ -114,16 +82,105 @@ Latency:  18 ms
 
 Code block lines are planned at **≤ 36 visible characters**, measured from actual Discord rendering tests on mobile.
 
-### 5. Long changes and warnings
+### 3. Color that survives copy/paste
+
+A `diff` block is the one place Discord gives you real red and green without hacks — and it still reads correctly for anyone who cannot see color, because `-` and `+` carry the meaning too.
+
+````text
+```diff
+- Manual retry after failure
+- Status page updated by hand
+
++ Automatic retry with backoff
++ Live status from health checks
+```
+````
+
+ANSI color blocks exist, but they did **not** render on the tested mobile client. The skill treats them as desktop-only and never picks them automatically.
+
+### 4. Before and after, at a glance
+
+When one change matters more than the rest, it gets a stacked card instead of a bullet:
+
+```text
+## ⭐ Key change
+
+**Access control**
+
+🔴 **Before**
+`Individual user permissions`
+
+🟢 **After**
+`Role-based permissions`
+```
+
+`Before` and `After` stay spelled out. The color is an accent, never the message.
+
+### 5. Timestamps that adapt to the reader
+
+This is the trick most Discord posts miss. Write the time once, and every reader sees it in **their own** time zone — with a live countdown that keeps updating:
+
+```text
+# 📅 Maintenance window
+
+**Environment:** `Production`
+**Starts:** <t:1787241600:f>
+**Countdown:** <t:1787241600:R>
+**Duration:** ~2 h
+
+> ℹ️ **Information**
+> Read access stays available throughout.
+```
+
+That timestamp resolves to 16:00 UTC. A reader in Berlin sees 18:00, one in New York sees 12:00, and both see the same live countdown next to it — from the exact same message text. No "18:00 CEST (12:00 EDT)" gymnastics, and nothing to correct when the date moves.
+
+### 6. Release notes → changelog categories
 
 **You type:**
 
 ```text
-access control moves from individual user permissions to role-based
-permissions, needs a restart
+2.5.0 shipped. new bulk export and a dark theme. session timeout went
+from 30 to 45 minutes. dropped the old CSV importer. fixed the crash
+on empty search.
 ```
 
 **You paste into Discord:**
+
+```text
+# 🚀 Release 2.5.0
+
+## ✨ Added
+- Bulk export
+- Dark theme
+
+## 🔄 Changed
+- **Session timeout:** ~~`30 min`~~ → `45 min`
+
+## 🗑️ Removed
+- Legacy CSV importer
+
+## 🐛 Fixed
+- Crash on empty search
+```
+
+Only categories that actually have content are emitted — no empty `Removed` heading just because the template has one.
+
+### 7. Live status without a table
+
+```text
+## Service status
+
+🟢 **API** — Online · `42 ms`
+🟢 **Database** — Online · `18 ms`
+🟡 **Cache** — Degraded · `91 ms`
+🔴 **Backup** — Failed
+```
+
+The state is always written as text too. The emoji never carries the meaning on its own.
+
+### 8. Long changes stay unambiguous
+
+A long `OLD → NEW` pair would blow past the width budget on one line, so it becomes a stacked hanging change:
 
 ````text
 ## Access control
@@ -138,9 +195,7 @@ Access control
 > This change requires a restart.
 ````
 
-A long `OLD → NEW` pair would blow past the width budget on one line, so it becomes a stacked hanging change.
-
-Note that this last example is wrapped in **four** backticks, because the Discord message itself contains three. That is the transport rule (§ 3), and it is why the skill hands you output that way in a chat interface: the inner backticks survive copy/paste instead of being swallowed by ChatGPT or Claude.
+Note that examples 1, 3 and 8 are wrapped in **four** backticks, because the Discord message itself contains three. That is the transport rule (§ 3), and it is why the skill hands you output that way in a chat interface: the inner backticks survive copy/paste instead of being swallowed by ChatGPT or Claude.
 
 ---
 
@@ -174,7 +229,7 @@ Create a Project and upload `SKILL.md` to the project knowledge, then put a shor
 When I ask for Discord output, follow SKILL.md from the project knowledge.
 ```
 
-The specification is ~60 KB, which is why it belongs in project knowledge rather than pasted into an instructions field.
+The specification is ~57 KB, which is why it belongs in project knowledge rather than pasted into an instructions field.
 
 For a one-off message, attaching `SKILL.md` to a single chat works too.
 
@@ -292,7 +347,8 @@ discord-writer/
 │   └── CONTENT-PROFILE-TEMPLATE.yaml
 └── examples/
     ├── PROFILE-EXAMPLES.md
-    └── COMPONENT-SET-PROFILE-EXAMPLE.yaml
+    ├── COMPONENT-SET-PROFILE-EXAMPLE.yaml
+    └── SCREENSHOT-SOURCES.md
 ```
 
 ## Working on this repository

@@ -298,13 +298,13 @@ For release notes and version updates, semantic categories are usually better th
 Recommended base pattern:
 
 ```text
-## ➕ Added
+## ✨ Added
 - New feature
 
 ## 🔄 Changed
 - **Timeout:** ~~`30 s`~~ → `45 s`
 
-## ➖ Removed
+## 🗑️ Removed
 - Old feature
 
 ## 🐛 Fixed
@@ -324,6 +324,19 @@ Rules:
 - Prefer changelog categories for public release notes.
 - Still use `diff` when the exact technical difference is the main point.
 - Under `🔄 Changed`, Strikethrough Change can be preferred.
+
+## Category emoji contrast
+
+Empirically tested on a mobile Discord client in the dark theme: `➕` and `➖`
+render as thin, pale glyphs with very low contrast, while `🔄` and `🐛` carry
+strong color. Using them makes *Added* and *Removed* — usually the two most
+important categories — the visually weakest headings on the post.
+
+Therefore prefer emoji with their own strong color for these two categories.
+`✨` and `🗑️` are the defaults for that reason, not for decoration.
+
+Avoid `🟢` / `🔴` here: those are already bound to OK/error semantics in status
+lists (§ 9.1), and reusing them for added/removed conflicts with § 9.2.
 
 ---
 
@@ -1013,7 +1026,9 @@ Acceptance: copy/paste as one contiguous Discord raw text.
 
 ## R7 – Changelog
 
-Must render categories such as `➕ Added`, `🔄 Changed`, `➖ Removed`, `🐛 Fixed` cleanly on mobile.
+Must render categories such as `✨ Added`, `🔄 Changed`, `🗑️ Removed`, `🐛 Fixed` cleanly on mobile.
+
+Acceptance: every category heading is recognizable at a glance in the dark theme. Pale, low-contrast category emoji (see § 5.3) fail this case.
 
 ## R8 – Callout + status list
 
@@ -1228,9 +1243,9 @@ discord_writer:
   changelog:
     enabled: true
     categories:
-      new: "➕ Added"
+      new: "✨ Added"
       changed: "🔄 Changed"
-      removed: "➖ Removed"
+      removed: "🗑️ Removed"
       fixed: "🐛 Fixed"
       performance: "⚡ Performance"
       security: "🔒 Security"
@@ -1339,11 +1354,13 @@ Example:
 ```yaml
 changelog:
   categories:
-    new: "✨ Features"
-    changed: "🛠️ Changes"
-    removed: "🗑️ Removed"
+    new: "🎉 Features"
+    changed: "🛠️ Improvements"
+    removed: "📦 Retired"
     fixed: "🩹 Fixes"
 ```
+
+When replacing the defaults, keep the contrast requirement from § 5.3 in mind: a category emoji with no strong color of its own weakens exactly the heading it is meant to mark.
 
 Status example:
 
@@ -1393,7 +1410,7 @@ Only a few central emojis, e.g. in H1 or warnings.
 
 ### `functional`
 
-Emojis carry supporting semantics, e.g. `➕ Added`, `⚠️ Warning`, `🟢 Online`.
+Emojis carry supporting semantics, e.g. `✨ Added`, `⚠️ Warning`, `🟢 Online`.
 
 ### `visual`
 

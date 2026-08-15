@@ -10,6 +10,8 @@
 - Translated all example content in the specification (change cards, hybrid post, status lists, checklists, regression cases) while preserving the mobile width budget of ≤ 36 characters for code block examples.
 - Added the MIT license and published the repository.
 - Reworked `README.md`: worked examples of real skill output up front, separate installation instructions for Claude Code, Claude and ChatGPT, and a header image.
+- Changed the default changelog category emoji from `➕`/`➖` to `✨`/`🗑️`. Rendering test on a mobile dark-theme client showed `➕` and `➖` as thin, pale glyphs, which made *Added* and *Removed* the visually weakest headings of a release post. Documented as a new finding in § 5.3 and as an acceptance criterion in R7.
+- Added `examples/SCREENSHOT-SOURCES.md`: paste-ready sources for the README screenshots, matching the "See it in action" sections one to one.
 
 ## 1.4
 
