@@ -1,7 +1,7 @@
 ---
 name: discord-writer
 description: Use ONLY when the user wants content prepared as a Discord message to paste into a channel — announcements, changelogs, release notes, patch notes, status posts, updates or summaries for Discord. Discord must be named in the request or unambiguous from context. Formats such content as ready-to-paste, mobile-first messages using native Discord Markdown, responsive change lists, changelog categories, callouts, status and record layouts, diff, timestamps and link-preview control, steerable by user style profiles. Do NOT use for Discord bot or API development (discord.py, discord.js, embed JSON, slash commands, webhooks, gateway events), for message formatting on other platforms, or for general Markdown work.
-version: 1.7
+version: 1.7.1
 ---
 
 # discord-writer

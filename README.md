@@ -94,9 +94,20 @@ The skill is a single file: [`SKILL.md`](SKILL.md). Any assistant that can read 
 
 **When it activates:** only when Discord is named in your request or clear from context. It deliberately stays out of the way for Discord *bot* and API work (`discord.py`, embed JSON, slash commands), for other platforms, and for general Markdown — see § 0. Once you have established Discord in a conversation, follow-up messages inherit it.
 
-### Claude Code
+### Claude Code — as a plugin (recommended)
 
-Install it as a personal skill so it loads automatically when a task looks like Discord formatting:
+This repository is also a plugin marketplace, so Claude Code can install and update it for you:
+
+```text
+/plugin marketplace add gomaaz/discord-writer
+/plugin install discord-writer@gomaaz
+```
+
+Pull later updates with `/plugin marketplace update gomaaz`.
+
+### Claude Code — manual install
+
+If you would rather not use the plugin system, copy the specification into your skills directory:
 
 ```bash
 git clone https://github.com/gomaaz/discord-writer.git
@@ -106,7 +117,7 @@ cp discord-writer/SKILL.md ~/.claude/skills/discord-writer/SKILL.md
 
 For a single project instead of your whole account, use `.claude/skills/discord-writer/SKILL.md` inside that project.
 
-Then just ask:
+Either way, you then just ask:
 
 ```text
 Format this as a Discord announcement: <your notes>
@@ -253,6 +264,9 @@ The base skill stays generic. It selects a layout from the *shape of the informa
 ```text
 discord-writer/
 ├── SKILL.md
+├── .claude-plugin/
+│   ├── plugin.json          # plugin manifest
+│   └── marketplace.json     # marketplace catalog
 ├── README.md
 ├── CLAUDE.md
 ├── PROJECT_HANDOFF.md
@@ -285,7 +299,7 @@ The specification is written in English. That does not determine the output lang
 
 ## Version
 
-Current version: **1.7**
+Current version: **1.7.1**
 
 ## License
 

@@ -131,7 +131,24 @@ For meaningful changes:
 4. update `CHANGELOG.md`,
 5. bump `VERSION` and the version field in `SKILL.md` only when the change warrants a release.
 
-A release bump touches four places that must stay consistent: `VERSION`, the `version:` field in the `SKILL.md` frontmatter, `README.md` ("Current version"), and the version comment in `templates/CONTENT-PROFILE-TEMPLATE.yaml`. `PROJECT_HANDOFF.md` also names the current version.
+A release bump touches five places that must stay consistent: `VERSION`, the `version:` field in the `SKILL.md` frontmatter, `README.md` ("Current version"), the version comment in `templates/CONTENT-PROFILE-TEMPLATE.yaml`, and `version` in `.claude-plugin/plugin.json` — the last one in semver form, so `1.7` becomes `1.7.0`. `PROJECT_HANDOFF.md` also names the current version.
+
+## Plugin and marketplace
+
+The repository is simultaneously a Claude Code plugin and a marketplace that lists it:
+
+- `.claude-plugin/plugin.json` — plugin manifest
+- `.claude-plugin/marketplace.json` — marketplace catalog, one entry with `"source": "./"`
+
+It works as a **single-skill plugin**: because `SKILL.md` sits at the repository root, there is no `skills/` directory and no `skills` field in the manifest, Claude Code loads the root `SKILL.md` directly and takes the skill name from its frontmatter. Do not create a `skills/` directory or add a `skills` field without moving `SKILL.md` accordingly — either one silently breaks that mechanism.
+
+Validate after touching either manifest:
+
+```bash
+claude plugin validate .
+```
+
+Users install with `/plugin marketplace add gomaaz/discord-writer` and `/plugin install discord-writer@gomaaz`. The marketplace name (`gomaaz`) is public and appears in that command, so renaming it breaks existing installs.
 
 `SKILL.md` sections are numbered and cross-referenced by number throughout the repository. When inserting a section, prefer a sub-number (e.g. `9.3`) over renumbering everything that follows.
 

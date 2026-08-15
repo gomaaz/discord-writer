@@ -2,7 +2,7 @@
 
 ## Current state
 
-The project reached version **1.7** through iterative real-world Discord rendering tests on desktop and mobile. As of 1.5 the specification and all templates/examples are English-only; output language still follows the user.
+The project reached version **1.7.1** through iterative real-world Discord rendering tests on desktop and mobile. As of 1.5 the specification and all templates/examples are English-only; output language still follows the user.
 
 The project began as a formatting helper and evolved into a generic content-aware Discord renderer with:
 

@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.7.1
+
+- Added `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json`: the repository is now installable as a Claude Code plugin and acts as its own marketplace.
+- Works as a single-skill plugin — `SKILL.md` stays at the repository root, no `skills/` directory and no `skills` manifest field, so nothing had to be restructured.
+- README documents both paths: plugin install via `/plugin marketplace add`, and the manual copy into the skills directory.
+
 ## 1.7
 
 - Added § 0 "When this skill applies". The skill had no activation rule at all: whether it fired was decided solely by the frontmatter `description`, which described capabilities rather than triggers.

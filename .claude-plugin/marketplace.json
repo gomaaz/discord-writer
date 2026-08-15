@@ -1,0 +1,23 @@
+{
+  "name": "gomaaz",
+  "description": "Skills for turning content into well-structured messages, starting with Discord.",
+  "owner": {
+    "name": "gomaaz",
+    "url": "https://github.com/gomaaz"
+  },
+  "plugins": [
+    {
+      "name": "discord-writer",
+      "source": "./",
+      "description": "Turn arbitrary content into copy-ready, mobile-first Discord messages. Picks the layout from the shape of the information and can be steered by user style profiles.",
+      "category": "productivity",
+      "tags": [
+        "discord",
+        "formatting",
+        "changelog",
+        "release-notes",
+        "announcements"
+      ]
+    }
+  ]
+}
