@@ -90,7 +90,7 @@ The mobile budget of **≤ 36 visible characters** comes from actual rendering t
 
 The skill is a single file: [`SKILL.md`](SKILL.md). Any assistant that can read it can follow it.
 
-**When it activates:** only when Discord is named in your request or clear from context. It deliberately stays out of the way for Discord *bot* and API work (`discord.py`, embed JSON, slash commands), for other platforms, and for general Markdown — see § 0. Once you have established Discord in a conversation, follow-up messages inherit it.
+**When it activates:** only when Discord is named in your request or clear from context. It deliberately stays out of the way for Discord *bot* and API work (`discord.py`, embed JSON, slash commands), for other platforms, and for general Markdown — see § 0. The line runs through embeds too: the skill writes the text that goes *into* an embed, not the JSON that carries it. Once you have established Discord in a conversation, follow-up messages inherit it.
 
 ### Claude Code — as a plugin (recommended)
 
@@ -129,7 +129,7 @@ Create a Project and upload `SKILL.md` to the project knowledge, then put a shor
 When I ask for Discord output, follow SKILL.md from the project knowledge.
 ```
 
-The specification is ~57 KB, which is why it belongs in project knowledge rather than pasted into an instructions field.
+The specification is ~82 KB, which is why it belongs in project knowledge rather than pasted into an instructions field.
 
 For a one-off message, attaching `SKILL.md` to a single chat works too.
 
@@ -227,6 +227,33 @@ What `desktop-first` does **not** unlock: fake syntax highlighting for color, AN
 
 One thing worth knowing: Discord has no native Markdown table rendering at all. A `| a | b |` row shows up as literal text with pipes. So "keeping a table" always means an aligned monospace code block — the mode only changes how wide it may get.
 
+## Destinations and limits
+
+Screen priority decides how *wide* a post may be. The **destination** decides which technical limits it has to satisfy — and Discord does not apply one set to everything:
+
+| Destination | Title | Body | Other |
+|---|---|---|---|
+| text channel | — | 2,000 | — |
+| forum / media post | **required**, 1–100 | 2,000 for the opening post | ≤ 5 tags |
+| thread | 1–100 | 2,000 per message | — |
+| announcement | — | 2,000 | crossposting is rate-limited |
+| embed text | 256 | description 4,096 | 6,000 across **all** embeds of one message |
+
+Say where it goes and the skill applies the right ones:
+
+```text
+This goes in our forum channel.
+A bot posts this.
+```
+
+Say nothing and it plans for 2,000 characters, which every destination accepts. The 4,000-character Nitro budget is used only when you post by hand, have Nitro, and actually want longer messages — a bot sending the same text would be cut off.
+
+Three rules that follow from this and shape the output you get: a forum post always comes back **with a title**, because Discord requires one. Tags are **never invented** — if one seems to be required and you did not supply the options, you get one line saying so. And an image is **never treated as mandatory**, not even for a media channel post.
+
+Character counting happens on the finished text, after formatting — Markdown syntax, code fences, full-length URLs and `<t:...>` timestamps all count. If a limit is exceeded, the skill repairs it by rearranging: splitting on a real section boundary, closing and reopening a code fence across the cut, moving detail into a follow-up message. It does not repair by deleting what you wrote. Details in [`SKILL.md`](SKILL.md) § 2.2, § 14.1 and § 14.2.
+
+Embeds are a boundary case worth naming: the skill writes the **text** that goes into an embed and respects its limits. It does not build the embed JSON or the bot around it — that is code, and § 0 keeps it out of scope.
+
 ---
 
 ## What it does
@@ -277,6 +304,7 @@ discord-writer/
 ├── showcases/
 │   ├── README.md            # the gallery
 │   ├── CAPTURE-GUIDE.md     # how to produce its screenshots
+│   ├── messages/            # paste-ready message sources
 │   └── images/
 ├── templates/
 │   ├── GUIDELINE-TEMPLATE.yaml
@@ -290,7 +318,7 @@ discord-writer/
 
 This is the contributor path, not the usage path. Open the repository directory in Claude Code and ask Claude to read `CLAUDE.md`, `PROJECT_HANDOFF.md`, and `SKILL.md` before making changes. A suggested first instruction is included in `PROJECT_HANDOFF.md`.
 
-`SKILL.md` is the canonical source of behavior. There is no build step and no test runner; § 18 of `SKILL.md` holds the regression cases R1–R10 that should be re-checked after substantial changes.
+`SKILL.md` is the canonical source of behavior. There is no build step and no test runner; § 18 of `SKILL.md` holds the regression cases R1–R13 that should be re-checked after substantial changes.
 
 ## Language
 
@@ -298,7 +326,7 @@ The specification is written in English. That does not determine the output lang
 
 ## Version
 
-Current version: **1.8.1**
+Current version: **1.9**
 
 ## License
 

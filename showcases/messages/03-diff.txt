@@ -1,0 +1,7 @@
+```diff
+- Manual retry after failure
+- Status page updated by hand
+
++ Automatic retry with backoff
++ Live status from health checks
+```

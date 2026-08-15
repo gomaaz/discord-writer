@@ -1,0 +1,16 @@
+```
+API
+Status:   Online
+Version:  3.2.1
+Latency:  42 ms
+
+Database
+Status:   Online
+Version:  14.6
+Latency:  18 ms
+
+Cache
+Status:   Degraded
+Version:  7.0.5
+Latency:  91 ms
+```

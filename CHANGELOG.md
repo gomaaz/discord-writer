@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.8.2
+
+- Added `showcases/messages/`: one file per showcase message, holding the Discord raw text with no fence around it. Testing showed why — pasting from a fenced block on a documentation page pulls the outer backticks along, which turns the whole post into a code block and breaks any message containing its own ``` block.
+- `CAPTURE-GUIDE.md` now links the files instead of embedding blocks to be trimmed by hand. Select all, copy, paste.
+
+## 1.9
+
+- **Added § 2.2 "Destination".** The skill previously assumed every message was a plain text-channel post. It now resolves where the message is going — text, forum, media, thread, announcement, embed text or voice message — and applies that destination's limits, with a table of all of them. Unknown values fall back to safe defaults that hold everywhere.
+- 2,000 characters is stated as the universal safe budget. The 4,000-character Nitro budget requires all three of manual delivery, confirmed Nitro and a user who wants longer messages — the previous wording ("unless a higher limit is known") was too vague to act on.
+- Forum and media posts now require a title of 1–100 characters, overflow goes into thread replies rather than a longer opening post, media is never treated as mandatory, and tags are never invented.
+- Embeds are in scope for their **text** (title 256, description 4,096, 6,000 across all embeds of one message) and out of scope for their JSON. § 0 keeps bot and API development excluded; the boundary is now stated explicitly instead of implied.
+- Added the constraint-stability classification: API hard limit, client limit, server-configurable, environment-dependent, recommendation. The § 2 width budgets are explicitly the last of these — tested layout guidance, not something Discord enforces. Attachment upload size must never be quoted as a fixed number.
+- **Added § 14.1 "Where exactly the cut goes":** a split-priority ladder from section boundary down to a hard character cut, a list of structures that must never be cut through, the rule to close and reopen a code fence across a split, and continuation labels as counted content.
+- **Added § 14.2 "Count, validate, then repair":** what counts as a character (Markdown syntax, fences, full-length URLs, `<t:...>` at syntax length; the transport backticks do not), validation after formatting rather than before, the eight-step render order, and an explicit allow/deny list for automatic repair — rearranging is repair, removing is the user's decision.
+- Wired the destination through § 0 (embed boundary), § 14, § 17 (step 0 split into 0.1 destination / 0.2 layout mode, new step S), § 19.1 Layer A, § 20.3, § 21.1, § 22.1 (new `destination` block), § 24 (two new adaptation cases) and § 26 (new "Destination and limits" checklist).
+- Added regression cases R12 (forum post: title present, overflow as replies, no invented tag, no demanded image) and R13 (splitting mechanics: cut on a section boundary, fence closed and reopened, both parts within 2,000 characters).
+- § 28 short form grew from 28 to 31 rules.
+- Corrected the `SKILL.md` size quoted in § 0 and the README install instructions: ~57 KB → ~82 KB. It had been stale since 1.5.
+- Source of these rules: `rules/discord_destination_constraints.md`, kept as the origin document. `SKILL.md` remains canonical.
+
 ## 1.8.1
 
 - Merged showcases "One layout, two screens" and "Layout mode" into a single "Screen priority" entry. Both needed the same screenshot, and the part that distinguished them — the offer to narrow the layout — is a chat reply, not a Discord message, so it could not be captured at all. Eight showcases, nine captures.

@@ -2,11 +2,12 @@
 
 ## Current state
 
-The project reached version **1.8.1** through iterative real-world Discord rendering tests on desktop and mobile. As of 1.5 the specification and all templates/examples are English-only; output language still follows the user.
+The project reached version **1.9** through iterative real-world Discord rendering tests on desktop and mobile. As of 1.5 the specification and all templates/examples are English-only; output language still follows the user.
 
 The project began as a formatting helper and evolved into a generic content-aware Discord renderer with:
 
 - a steerable screen-priority model, desktop-first by default,
+- a destination model covering text, forum, media, thread, announcement and embed text (§ 2.2),
 - native Markdown and hybrid post layouts,
 - multiple responsive change representations,
 - changelog, status, callout, checklist, metadata, link and timestamp patterns,
@@ -48,6 +49,12 @@ The current rules are based on actual rendering tests, including:
 - Discord timestamps render locally and are useful for date/time presentation.
 
 Treat these as regression-sensitive behavior.
+
+## Destination constraints (1.9)
+
+Separate from the rendering findings above, § 2.2 / § 14.1 / § 14.2 carry Discord's own technical limits: 2,000 characters as the universal safe budget, 4,000 only for manual Nitro delivery, required 1–100 character titles for forum and media posts, the tag budget, and the embed budget of 6,000 across all embeds of one message.
+
+These are API facts rather than rendering observations, so they are classified by stability (§ 2.2, "How firm is a limit?"). Do not blur the two categories: the width budgets stay recommendations, and Discord's character limits stay hard limits. Source document: `rules/discord_destination_constraints.md`.
 
 ## What to improve next
 

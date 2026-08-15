@@ -10,6 +10,15 @@ discord_writer:
     platform: desktop-first      # desktop-first | balanced | mobile-first
     density: balanced            # compact | balanced | spacious
 
+  # Technical limits of the target. See SKILL.md § 2.2.
+  # Only set this when the destination is ALWAYS the same. A destination that
+  # varies per post belongs in the post, not in the profile.
+  destination:
+    type: text                   # text | forum | media | thread | announcement | embed | voice-message
+    delivery: manual             # manual | bot | webhook
+    nitro: false                 # true enables the 4,000-char budget for manual delivery only
+    require_tag: false           # true when the server enforces at least one forum/media tag
+
   language:
     locale: en                   # output language of the Discord message
     tone: neutral                # neutral | technical | casual | community | executive

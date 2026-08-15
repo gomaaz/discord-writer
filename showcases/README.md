@@ -7,8 +7,9 @@ and a screenshot of how Discord renders it. Everything here is real output, not
 a mockup.
 
 > **Screenshots pending.** The sources below are final; no captures exist yet.
-> [`CAPTURE-GUIDE.md`](CAPTURE-GUIDE.md) has the whole job in order: what to post,
-> which device each shot needs, and the filename to hand back.
+> [`CAPTURE-GUIDE.md`](CAPTURE-GUIDE.md) has the whole job in order. The blocks on
+> this page are for reading — to actually post one, copy the matching file from
+> [`messages/`](messages/), which holds the raw text with no fence around it.
 
 ## Overview
 

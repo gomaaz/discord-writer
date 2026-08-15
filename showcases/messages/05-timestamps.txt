@@ -1,0 +1,9 @@
+# 📅 Maintenance window
+
+**Environment:** `Production`
+**Starts:** <t:1787241600:f>
+**Countdown:** <t:1787241600:R>
+**Duration:** ~2 h
+
+> ℹ️ **Information**
+> Read access stays available throughout.

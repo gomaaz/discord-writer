@@ -1,0 +1,10 @@
+## Access control
+
+```
+Access control
+  Individual permissions
+  → Role-based permissions
+```
+
+> ⚠️ **Warning**
+> This change requires a restart.

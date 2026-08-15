@@ -1,0 +1,22 @@
+# 🚀 Release 2.5.0
+
+Bulk export is live, and sync no longer needs a human.
+
+## Changes
+
+- **Timeout:** `30 s` → `45 s`
+- **Sync:** `Manual` → `Automatic`
+
+## Replaced
+
+```diff
+- Manual CSV import
++ Scheduled bulk export
+```
+
+> ⚠️ **Warning**
+> The first run starts tonight and may take an hour.
+
+**Rollout:** <t:1787241600:R>
+
+-# Existing exports stay available for 30 days.

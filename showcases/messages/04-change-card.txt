@@ -1,0 +1,9 @@
+## ⭐ Key change
+
+**Access control**
+
+🔴 **Before**
+`Individual user permissions`
+
+🟢 **After**
+`Role-based permissions`

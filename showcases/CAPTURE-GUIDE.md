@@ -1,10 +1,15 @@
 # Capture guide
 
-Everything needed to produce the nine screenshots for the gallery, in the order
-you should work through it.
+Everything needed to produce the nine screenshots for the gallery.
 
-Hand the finished PNGs over with the filenames below — they are wired into
-`README.md`, so a matching name is all that is needed to place them.
+The messages are **files**, not code blocks on this page: open the file, select
+all, copy, paste into Discord. Nothing to trim, nothing to accidentally include.
+
+That matters more than it sounds. Several of these messages contain ``` code
+blocks of their own, so a copy that picks up one stray backtick too many turns
+the whole post into a code block instead of a rendered message. Files avoid the
+problem entirely — which is the same reason `SKILL.md` § 3 wraps finished output
+in four backticks when it comes out of a chat interface.
 
 ## Before you start
 
@@ -12,201 +17,60 @@ Hand the finished PNGs over with the filenames below — they are wired into
    messages, no avatars in frame.
 2. Set Discord to the **dark theme**. The contrast rules were tested there, and
    the header image matches it.
-3. Post messages **1 to 9 below in order**, each as its own message.
+3. Post the nine messages from [`messages/`](messages/) in order, each as its own
+   message. Open file → select all → copy → paste → send.
 
 Then capture: pass 1 on desktop, pass 2 on the phone. You post once and
 photograph twice — there is no need to post anything a second time.
 
-## What to capture where
+## The nine captures
 
-| # | File | Device | Content |
+| # | Paste this file | Save the screenshot as | Device |
 |---|---|---|---|
-| 1 | `01-hybrid-post.png` | 🖥️ desktop | message 1 |
-| 2 | `02a-table-desktop.png` | 🖥️ desktop | message 2 |
-| 3 | `02b-records-mobile.png` | 📱 **phone** | message 3 |
-| 4 | `03-diff.png` | 🖥️ desktop | message 4 |
-| 5 | `04-change-card.png` | 🖥️ desktop | message 5 |
-| 6 | `05-timestamps.png` | 🖥️ desktop | message 6 |
-| 7 | `06-changelog.png` | 🖥️ desktop | message 7 |
-| 8 | `07-status-list.png` | 🖥️ desktop | message 8 |
-| 9 | `08-hanging-callout.png` | 📱 phone | message 9 |
+| 1 | [`messages/01-hybrid-post.txt`](messages/01-hybrid-post.txt) | `01-hybrid-post.png` | 🖥️ desktop |
+| 2 | [`messages/02a-table-desktop.txt`](messages/02a-table-desktop.txt) | `02a-table-desktop.png` | 🖥️ desktop |
+| 3 | [`messages/02b-records-mobile.txt`](messages/02b-records-mobile.txt) | `02b-records-mobile.png` | 📱 **phone** |
+| 4 | [`messages/03-diff.txt`](messages/03-diff.txt) | `03-diff.png` | 🖥️ desktop |
+| 5 | [`messages/04-change-card.txt`](messages/04-change-card.txt) | `04-change-card.png` | 🖥️ desktop |
+| 6 | [`messages/05-timestamps.txt`](messages/05-timestamps.txt) | `05-timestamps.png` | 🖥️ desktop |
+| 7 | [`messages/06-changelog.txt`](messages/06-changelog.txt) | `06-changelog.png` | 🖥️ desktop |
+| 8 | [`messages/07-status-list.txt`](messages/07-status-list.txt) | `07-status-list.png` | 🖥️ desktop |
+| 9 | [`messages/08-hanging-callout.txt`](messages/08-hanging-callout.txt) | `08-hanging-callout.png` | 📱 phone |
 
-Only **one** shot needs a phone for its content: `02b`, where the narrow layout
-is the entire point. `08` is on the phone because a hanging change is what a
-narrow screen is for — a desktop shot works too if that is easier.
+Only **one** shot truly needs a phone: `02b`, where the narrow layout is the
+entire point and, next to `02a`, forms the before/after of the layout mode. `08`
+is on the phone because a hanging change is what narrow screens are for — a
+desktop shot works too if that is easier.
+
+Desktop is the default everywhere else because that is what the `desktop-first`
+default produces (`SKILL.md` § 2).
 
 **Crop** to the message body: no channel list, no sidebar, no message input bar,
 no username or avatar. Just the message.
 
-## The messages to post
+## Two things to watch while capturing
 
-The fences below are transport containers (`SKILL.md` § 3). **Do not paste the
-outermost backticks** — copy only what is inside them. Where a message contains
-its own ``` lines, those *are* part of the message and must be pasted.
+**Message 6, timestamps.** The value resolves to 2026-08-20 16:00 UTC. If that
+date has passed, the countdown renders in the past and the screenshot loses its
+point — say so and I will swap a future timestamp into the gallery, the README
+and the message file before you capture.
 
-### Message 1 → `01-hybrid-post.png` 🖥️
+**Message 7, changelog.** Look closely at `✨` and `🗑️`. They are the defaults
+because `➕` and `➖` washed out in the dark theme (`SKILL.md` § 5.3). If the new
+ones look pale too, that is a finding worth reporting rather than working around.
 
-`````text
-# 🚀 Release 2.5.0
+## If a message renders wrong
 
-Bulk export is live, and sync no longer needs a human.
+Check first whether the paste picked up something it should not have — a leading
+```` ```text ```` line means extra characters came along. The files contain
+exactly the message and nothing else, so a clean select-all cannot go wrong.
 
-## Changes
-
-- **Timeout:** `30 s` → `45 s`
-- **Sync:** `Manual` → `Automatic`
-
-## Replaced
-
-```diff
-- Manual CSV import
-+ Scheduled bulk export
-```
-
-> ⚠️ **Warning**
-> The first run starts tonight and may take an hour.
-
-**Rollout:** <t:1787241600:R>
-
--# Existing exports stay available for 30 days.
-`````
-
-### Message 2 → `02a-table-desktop.png` 🖥️
-
-`````text
-```
-SERVICE     STATUS     VERSION   LATENCY
-API         Online     3.2.1     42 ms
-Database    Online     14.6      18 ms
-Cache       Degraded   7.0.5     91 ms
-```
-`````
-
-### Message 3 → `02b-records-mobile.png` 📱
-
-The same data, narrow. Capture this one **on your phone** — side by side with
-message 2 it is the before/after of the whole layout-mode idea.
-
-`````text
-```
-API
-Status:   Online
-Version:  3.2.1
-Latency:  42 ms
-
-Database
-Status:   Online
-Version:  14.6
-Latency:  18 ms
-
-Cache
-Status:   Degraded
-Version:  7.0.5
-Latency:  91 ms
-```
-`````
-
-### Message 4 → `03-diff.png` 🖥️
-
-Check that red and green actually render before capturing.
-
-`````text
-```diff
-- Manual retry after failure
-- Status page updated by hand
-
-+ Automatic retry with backoff
-+ Live status from health checks
-```
-`````
-
-### Message 5 → `04-change-card.png` 🖥️
-
-````text
-## ⭐ Key change
-
-**Access control**
-
-🔴 **Before**
-`Individual user permissions`
-
-🟢 **After**
-`Role-based permissions`
-````
-
-### Message 6 → `05-timestamps.png` 🖥️
-
-The timestamp is 2026-08-20 16:00 UTC. **If that date has passed**, the countdown
-renders in the past and the screenshot loses its point — tell me and I will swap
-in a future timestamp across the gallery and the README before you capture.
-
-````text
-# 📅 Maintenance window
-
-**Environment:** `Production`
-**Starts:** <t:1787241600:f>
-**Countdown:** <t:1787241600:R>
-**Duration:** ~2 h
-
-> ℹ️ **Information**
-> Read access stays available throughout.
-````
-
-### Message 7 → `06-changelog.png` 🖥️
-
-Watch the category emoji. They were chosen because `➕` and `➖` washed out in the
-dark theme (`SKILL.md` § 5.3). If `✨` or `🗑️` look pale here too, that is a
-finding — tell me rather than working around it.
-
-````text
-# 🚀 Release 2.5.0
-
-## ✨ Added
-- Bulk export
-- Dark theme
-
-## 🔄 Changed
-- **Session timeout:** ~~`30 min`~~ → `45 min`
-
-## 🗑️ Removed
-- Legacy CSV importer
-
-## 🐛 Fixed
-- Crash on empty search
-````
-
-### Message 8 → `07-status-list.png` 🖥️
-
-````text
-## Service status
-
-🟢 **API** — Online · `42 ms`
-🟢 **Database** — Online · `18 ms`
-🟡 **Cache** — Degraded · `91 ms`
-🔴 **Backup** — Failed
-````
-
-### Message 9 → `08-hanging-callout.png` 📱
-
-`````text
-## Access control
-
-```
-Access control
-  Individual permissions
-  → Role-based permissions
-```
-
-> ⚠️ **Warning**
-> This change requires a restart.
-`````
+If the render is genuinely off, that is a finding, not a bad screenshot. The
+specification is built from rendering tests; if the render disagrees with
+`SKILL.md`, the specification is what changes.
 
 ## Handing them over
 
-Drop the PNGs into `showcases/images/` using exactly the filenames above. I will
-place them in the gallery, add the thumbnails to the overview table and flip the
-status markers.
-
-If a capture contradicts what `SKILL.md` claims, that is a finding, not a bad
-screenshot. The specification is built from rendering tests; if the render
-disagrees, the specification is what changes.
+Drop the PNGs into [`images/`](images/) using exactly the filenames in the table.
+I will place them in the gallery, add thumbnails to the overview and update the
+status.

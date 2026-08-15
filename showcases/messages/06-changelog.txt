@@ -1,0 +1,14 @@
+# 🚀 Release 2.5.0
+
+## ✨ Added
+- Bulk export
+- Dark theme
+
+## 🔄 Changed
+- **Session timeout:** ~~`30 min`~~ → `45 min`
+
+## 🗑️ Removed
+- Legacy CSV importer
+
+## 🐛 Fixed
+- Crash on empty search

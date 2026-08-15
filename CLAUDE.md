@@ -24,7 +24,7 @@ Before changing anything, read:
 
 There is nothing to build or lint. Changes are verified by **rendering, not by running commands**:
 
-- `SKILL.md` § 18 holds the regression suite `R1`–`R10` (normal post, short `ALT → NEU`, long change, multi-dimensional record, `diff`, hybrid post, changelog, callout + status list, metadata + timestamp, links). Each case has explicit acceptance criteria.
+- `SKILL.md` § 18 holds the regression suite `R1`–`R13` (normal post, short `ALT → NEU`, long change, multi-dimensional record, `diff`, hybrid post, changelog, callout + status list, metadata + timestamp, links, layout mode, destination requirements, splitting mechanics). Each case has explicit acceptance criteria.
 - To "run a single test": produce the output for that case according to the changed rules and check it against that case's acceptance criteria — mentally for layout rules, in a real Discord client (desktop **and** mobile) for anything that touches rendering behavior.
 - § 26 is the pre-output quality checklist that applies to every generated message; § 31.6 adds the extra checklist for multi-component content.
 - Rules justified as "empirically tested" must not be changed on theory alone. New behavior claims need a new rendering test.
@@ -60,7 +60,11 @@ The binding precedence for the final rendering (`SKILL.md` § 21, § 34) is:
 
 ### Format selection
 
-The core principle (§ 1) is that the **shape of the information** picks the layout, not visual appeal: prose → native Markdown, short replacements → compact list, long replacements → hanging change, object with many properties → record layout, added/removed → `diff`, release notes → changelog categories, warnings → blockquote callouts, and so on. § 17 is the decision matrix (A–R) that operationalizes this, and § 28 is the 28-point short form of all key rules.
+The core principle (§ 1) is that the **shape of the information** picks the layout, not visual appeal: prose → native Markdown, short replacements → compact list, long replacements → hanging change, object with many properties → record layout, added/removed → `diff`, release notes → changelog categories, warnings → blockquote callouts, and so on. § 17 is the decision matrix (steps 0.1/0.2, then A–S) that operationalizes this, and § 28 is the short form of all key rules.
+
+### Destination model
+
+Orthogonal to format selection: § 2.2 decides *where* the message goes and which technical limits apply — text channel, forum, media, thread, announcement, embed text or voice message. § 14.1 governs where a split cuts, § 14.2 how the finished text is counted, validated and repaired. Unlike the width budgets, these are Discord's own limits; § 2.2 classifies every constraint by stability so the two never get confused.
 
 ### Configuration formats
 
@@ -102,6 +106,7 @@ These rules come from real rendering tests on desktop and mobile. Treat them as 
 - Discord timestamps `<t:...>` render in the reader's local time and are preferred for dates/times.
 - `➕` and `➖` render as thin, pale, low-contrast glyphs in the dark theme on mobile, while `🔄` and `🐛` carry strong color. Changelog defaults are therefore `✨ Added` / `🗑️ Removed` (`SKILL.md` § 5.3). Do not "restore" the plus/minus symbols as a tidiness fix — they were measured, not assumed.
 - No fake YAML/INI/CSS syntax highlighting as decoration — a neutral code block instead.
+- Discord's own limits (§ 2.2) are a different category from the width findings: 2,000 characters, 4,000 only for manual Nitro delivery, 1–100 character titles for forum/media posts, 6,000 across all embeds of one message. Never present one as the other — the width budgets are recommendations, these are hard limits.
 - Transport rule (§ 3): every finished Discord message is wrapped in **four** outer backticks so inner triple backticks survive copy/paste. The outer fence is the AI surface's container, not part of the Discord content. Multiple messages get one container each.
 
 ## README and specification must not contradict each other
@@ -113,6 +118,7 @@ Tokens that must be identical everywhere they appear — `README.md`, `SKILL.md`
 - changelog category labels and their emoji
 - callout labels, status wording and symbols
 - the width budgets per layout mode (36/40 · 48/56 · 80/100)
+- the destination limits (2,000 / 4,000 · title 1–100 · 5 tags · embed 256/4,096/6,000)
 - the `SKILL.md` file size quoted in the install instructions
 - section numbers referenced by prose
 - the Unix timestamp used in timestamp examples
@@ -151,6 +157,22 @@ claude plugin validate .
 Users install with `/plugin marketplace add gomaaz/discord-writer` and `/plugin install discord-writer@gomaaz`. The marketplace name (`gomaaz`) is public and appears in that command, so renaming it breaks existing installs.
 
 `SKILL.md` sections are numbered and cross-referenced by number throughout the repository. When inserting a section, prefer a sub-number (e.g. `9.3`) over renumbering everything that follows.
+
+## `rules/` — the inbox for rule drops
+
+`rules/` holds rule sets the user drops in to be integrated, in their original form. It is an **inbox and an origin record, not a second specification**. Nothing reads it at runtime; the skill ships as `SKILL.md` alone.
+
+When a file lands there:
+
+1. compare it against `SKILL.md` and identify what is genuinely new versus already covered,
+2. flag anything that contradicts an existing rule or the activation boundary in § 0 before integrating it,
+3. integrate the new rules into `SKILL.md` in the skill's own voice — do not paste the source wording, and do not import its RFC-2119 `MUST`/`SHOULD` register, which the specification does not use,
+4. name the source file in the `CHANGELOG.md` entry,
+5. leave the file in place. It documents where a rule came from.
+
+Because the source file stays, `SKILL.md` and `rules/` will drift over time. That is expected and acceptable: on any conflict, `SKILL.md` wins. Never "resync" the specification back to a source document.
+
+`rules/discord_destination_constraints.md` is the source for § 2.2, § 14.1 and § 14.2, integrated in 1.9.
 
 ## Repository goal
 

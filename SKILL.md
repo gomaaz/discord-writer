@@ -41,7 +41,7 @@ Unambiguous from context means, for example:
 
 Once Discord is established in a conversation, follow-up requests inherit it. The user does not have to repeat the word for every message.
 
-This skill is built for one job: turning content into a Discord message. Outside that job it adds ~57 KB of rules that get in the way, so its scope is deliberately narrow.
+This skill is built for one job: turning content into a Discord message. Outside that job it adds ~82 KB of rules that get in the way, so its scope is deliberately narrow.
 
 ## Apply when the user wants
 

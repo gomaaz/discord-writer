@@ -1,0 +1,6 @@
+```
+SERVICE     STATUS     VERSION   LATENCY
+API         Online     3.2.1     42 ms
+Database    Online     14.6      18 ms
+Cache       Degraded   7.0.5     91 ms
+```

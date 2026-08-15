@@ -1,0 +1,6 @@
+## Service status
+
+🟢 **API** — Online · `42 ms`
+🟢 **Database** — Online · `18 ms`
+🟡 **Cache** — Degraded · `91 ms`
+🔴 **Backup** — Failed
